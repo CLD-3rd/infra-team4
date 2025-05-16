@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Clould Engineering Univ - 메인 화면</title>
+  <style>
+    /* 기존 스타일 */
+    .psr-logo {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-weight: 900;
+      font-size: 32px;
+      color: #fff;
+      user-select: none;
+      cursor: pointer;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, color 0.3s ease;
+      z-index: 1001;
+    }
+
+    .psr-logo:hover {
+      color: #d0d8ff;
+      transform: scale(1.1);
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #6b8ce3 0%, #3a54e8 100%);
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #222;
+    }
+
+    .container {
+      background: #fff;
+      padding: 3rem 2.5rem 2.5rem;
+      border-radius: 12px;
+      width: 380px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      user-select: none;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    h1 {
+      margin-bottom: 2rem;
+      font-weight: 900;
+      font-size: 1.8rem;
+      color: #3a54e8;
+      letter-spacing: 1px;
+    }
+
+    .btn-notice, .btn-reservation {
+      background: linear-gradient(135deg, #3a54e8 0%, #6b8ce3 100%);
+      color: white;
+      font-weight: 700;
+      padding: 0.85rem 0;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.4s ease;
+      box-shadow: 0 5px 15px rgba(58, 84, 232, 0.4);
+      user-select: none;
+      margin-top: 10px;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s ease-out forwards;
+      animation-delay: 0.2s;
+    }
+
+    .btn-notice:hover, .btn-reservation:hover {
+      background: linear-gradient(135deg, #243bb8 0%, #4253d4 100%);
+      box-shadow: 0 6px 20px rgba(36, 59, 184, 0.7);
+    }
+
+    /* 프로필 사진 및 메뉴 */
+    .profile-wrapper {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .profile-pic {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid #2563eb;
+      object-fit: cover;
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
+    }
+
+    .profile-pic:hover {
+      box-shadow: 0 0 10px rgba(37, 99, 235, 0.8);
+      transform: scale(1.1);
+    }
+
+    .profile-menu {
+      position: absolute;
+      top: 54px;
+      right: 0;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border-radius: 6px;
+      width: 140px;
+      display: none;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .profile-menu.active {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .profile-menu button {
+      background: none;
+      border: none;
+      padding: 10px 15px;
+      text-align: left;
+      font-weight: 600;
+      color: #111827;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .profile-menu button:last-child {
+      border-bottom: none;
+    }
+
+    .profile-menu button:hover {
+      background-color: #f3f4f6;
+    }
+
+    /* 애니메이션 추가 */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="psr-logo">PSR</div>
+
+  <div class="profile-wrapper" id="profileWrapper" tabindex="0">
+    <img
+      src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+      alt="프로필 사진"
+      class="profile-pic"
+      id="profilePic"
+    />
+    <div class="profile-menu" id="profileMenu">
+      <button id="profileSettingsBtn">프로필 설정</button>
+      <button id="logoutBtn">로그아웃</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>Public Study Room</h1>
+    <button class="btn-notice" onclick="location.href='notice.html'">공지사항 보기</button>
+    <button class="btn-reservation" onclick="location.href='reservation.html'">스터디룸 예약</button>
+  </div>
+
+  <script>
+    const accessToken = localStorage.getItem('access');
+
+    console.log(accessToken);
+
+    document.querySelector('.psr-logo').addEventListener('click', () => {
+      window.location.href = 'func.html';
+    });
+
+    // 프로필 메뉴 토글
+    const profileWrapper = document.getElementById('profileWrapper');
+    const profileMenu = document.getElementById('profileMenu');
+
+    profileWrapper.addEventListener('click', () => {
+      profileMenu.classList.toggle('active');
+    });
+
+    // 메뉴 밖 클릭 시 닫기
+    window.addEventListener('click', (e) => {
+      if (!profileWrapper.contains(e.target)) {
+        profileMenu.classList.remove('active');
+      }
+    });
+
+    // 프로필 메뉴 버튼 클릭 이벤트 (예시)
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      profileMenu.classList.remove('active');
+    });
+
+    document.getElementById('profileSettingsBtn').addEventListener('click', () => {
+      window.location.href = 'profile_detail.html';
+      profileMenu.classList.remove('active');
+    });
+
+    // 로그아웃 처리
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8080/logout', {
+          method: 'POST',
+          credentials: 'include' // ✅ 쿠키를 함께 보내기 위해 필요
+        });
+
+        if (response.ok) {
+          // 로그아웃 성공
+          window.location.href = 'index.html';
+        } else {
+          alert('로그아웃에 실패했습니다.');
+        }
+      } catch (err) {
+        console.error('로그아웃 요청 중 오류 발생:', err);
+        alert('서버와의 연결에 실패했습니다.');
+      } finally {
+        // 메뉴 닫기
+        document.getElementById('profileMenu').classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

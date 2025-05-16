@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>스터디룸 예약</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 480px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f9fafb;
+      color: #111827;
+      position: relative;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #2563eb;
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+      color: #374151;
+      font-size: 1.1rem;
+    }
+    input[type="date"] {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 2px solid #2563eb;
+      font-size: 18px;
+      color: #2563eb;
+      box-shadow: 0 0 5px rgba(37, 99, 235, 0.4);
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+      margin-bottom: 20px;
+    }
+    input[type="date"]:focus {
+      border-color: #1e40af;
+      outline: none;
+      box-shadow: 0 0 10px rgba(30, 64, 175, 0.7);
+    }
+    .room-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 25px;
+    }
+    .room-button {
+      padding: 10px 18px;
+      border: 2px solid #2563eb;
+      background-color: white;
+      color: #2563eb;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .room-button:hover {
+      background-color: #2563eb;
+      color: white;
+    }
+    .room-button.active {
+      background-color: #2563eb;
+      color: white;
+      cursor: default;
+    }
+    .time-slots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .time-slot {
+      flex: 1 1 30%;
+      padding: 10px 0;
+      text-align: center;
+      border: 1px solid #2563eb;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    .time-slot.available {
+      color: black;
+      background-color: #e0e7ff;
+    }
+    .time-slot.reserved {
+      color: gray;
+      background-color: #f3f4f6;
+      cursor: not-allowed;
+    }
+
+    /* 프로필 사진 및 메뉴 */
+    .profile-wrapper {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+    .profile-pic {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid #2563eb;
+      object-fit: cover;
+      transition: box-shadow 0.3s ease;
+    }
+    .profile-pic:hover {
+      box-shadow: 0 0 8px #2563eb;
+    }
+    .profile-menu {
+      position: absolute;
+      top: 54px;
+      right: 0;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border-radius: 6px;
+      width: 140px;
+      display: none;
+      flex-direction: column;
+      user-select: none;
+    }
+    .profile-menu.active {
+      display: flex;
+    }
+    .profile-menu button {
+      background: none;
+      border: none;
+      padding: 10px 15px;
+      text-align: left;
+      font-weight: 600;
+      color: #111827;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .profile-menu button:last-child {
+      border-bottom: none;
+    }
+    .profile-menu button:hover {
+      background-color: #f3f4f6;
+    }
+    .psr-logo {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  font-weight: 700;
+  font-size: 24px;
+  color: #2563eb; /* 파란색 */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  user-select: none;
+  z-index: 1001; /* 프로필보다 위 */
+}
+  </style>
+</head>
+<body>
+    <div class="psr-logo">PSR</div>
+    
+  <!-- 프로필 영역 -->
+  <div class="profile-wrapper" id="profileWrapper" tabindex="0">
+    <img
+      src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+      alt="프로필 사진"
+      class="profile-pic"
+      id="profilePic"
+    />
+    <div class="profile-menu" id="profileMenu">
+      <button id="profileSettingsBtn">프로필 설정</button>
+      <button id="logoutBtn">로그아웃</button>
+    </div>
+  </div>
+
+  <h1>스터디룸 예약</h1>
+
+  <label for="reservation-date">예약 날짜 선택</label>
+  <input type="date" id="reservation-date" />
+
+  <div class="room-buttons" id="room-buttons">
+    <button class="room-button active" data-room="Room1">Room1</button>
+    <button class="room-button" data-room="Room2">Room2</button>
+    <button class="room-button" data-room="Room3">Room3</button>
+  </div>
+
+  <div class="time-slots" id="time-slots">
+    <!-- 시간 슬롯 출력 영역 -->
+  </div>
+
+  <script>
+    // 프로필 메뉴 토글
+    const profileWrapper = document.getElementById('profileWrapper');
+    const profileMenu = document.getElementById('profileMenu');
+
+    profileWrapper.addEventListener('click', () => {
+      profileMenu.classList.toggle('active');
+    });
+
+    // 메뉴 밖 클릭 시 닫기
+    window.addEventListener('click', (e) => {
+      if (!profileWrapper.contains(e.target)) {
+        profileMenu.classList.remove('active');
+      }
+    });
+
+    // 프로필 메뉴 버튼 클릭 이벤트 (예시)
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      alert('로그아웃 처리 필요');
+      profileMenu.classList.remove('active');
+    });
+    document.getElementById('profileSettingsBtn').addEventListener('click', () => {
+      alert('프로필 설정 페이지로 이동 (구현 필요)');
+      profileMenu.classList.remove('active');
+    });
+
+    // 기존 스터디룸 예약 스크립트
+    const timeSlotsContainer = document.getElementById('time-slots');
+    const reservationDateInput = document.getElementById('reservation-date');
+    const roomButtons = document.getElementById('room-buttons').querySelectorAll('.room-button');
+
+    const mockReservations = {
+      '2025-05-15|Room1': ['10:00', '14:00', '16:00'],
+      '2025-05-15|Room2': ['09:00', '11:00', '15:00'],
+      '2025-05-16|Room3': ['09:00', '11:00', '15:00', '17:00']
+    };
+
+    function generateTimeSlots() {
+      const slots = [];
+      for(let h = 9; h <= 17; h++) {
+        const hourString = h.toString().padStart(2, '0') + ':00';
+        slots.push(hourString);
+      }
+      return slots;
+    }
+
+    let selectedRoom = 'Room1';
+
+    function renderTimeSlots(date, room) {
+      timeSlotsContainer.innerHTML = '';
+      const reservedTimes = mockReservations[`${date}|${room}`] || [];
+      const allSlots = generateTimeSlots();
+
+      allSlots.forEach(time => {
+        const slotDiv = document.createElement('div');
+        slotDiv.classList.add('time-slot');
+
+        if(reservedTimes.includes(time)) {
+          slotDiv.classList.add('reserved');
+          slotDiv.textContent = `${time} (예약됨)`;
+        } else {
+          slotDiv.classList.add('available');
+          slotDiv.textContent = time;
+          slotDiv.addEventListener('click', () => {
+            alert(`"${date}" ${room} ${time} 예약을 신청합니다.`);
+          });
+        }
+
+        timeSlotsContainer.appendChild(slotDiv);
+      });
+    }
+
+    const today = new Date().toISOString().slice(0,10);
+    reservationDateInput.value = today;
+
+    roomButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        if(button.classList.contains('active')) return;
+        roomButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        selectedRoom = button.getAttribute('data-room');
+        renderTimeSlots(reservationDateInput.value, selectedRoom);
+      });
+    });
+
+    reservationDateInput.addEventListener('change', e => {
+      renderTimeSlots(e.target.value, selectedRoom);
+    });
+
+    renderTimeSlots(today, selectedRoom);
+  </script>
+</body>
+</html>
