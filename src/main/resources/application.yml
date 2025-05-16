@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: room-reservation
+  jwt:
+    secret: "6fmZPo9Ep9SFkLMnm7gSfz6UijdfbsSDW2dfsiZBaS"
+
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/security?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: root
+    password: "1234"  # 숫자만 있는 경우 따옴표로 감싸는 것이 안전
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    open-in-view: false
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        format_sql: true
+
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: DEBUG
+#      hibernate:
+#        SQL: debug
+#        orm.jdbc.bind: trace
+
