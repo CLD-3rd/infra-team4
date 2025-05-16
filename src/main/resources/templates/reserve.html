@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>스터디룸 예약</title>
+    <link rel="stylesheet" href="/css/reserve.css" />
+</head>
+<body>
+<div class="psr-logo">PSR</div>
+
+<!-- 프로필 영역 -->
+<div class="profile-wrapper" id="profileWrapper" tabindex="0">
+    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-pic" id="profilePic" />
+    <div class="profile-menu" id="profileMenu">
+        <button id="profileSettingsBtn">프로필 설정</button>
+        <button id="logoutBtn">로그아웃</button>
+    </div>
+</div>
+
+<h1>스터디룸 예약</h1>
+
+<label for="reservation-date">예약 날짜 선택</label>
+<input type="date" id="reservation-date" />
+
+<div class="room-buttons" id="room-buttons">
+    <button class="room-button active" data-room="Room1">Room1</button>
+    <button class="room-button" data-room="Room2">Room2</button>
+    <button class="room-button" data-room="Room3">Room3</button>
+</div>
+
+<div class="time-slots" id="time-slots"></div>
+
+<script src="/js/reserve.js"></script>
+</body>
+</html>

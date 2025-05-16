@@ -1,0 +1,14 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 480px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #f9fafb;
+  color: #111827;
+}
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2563eb;
+}
+/* ... 생략: 기존 스타일 전체 복사해서 여기에 붙여넣기 */
