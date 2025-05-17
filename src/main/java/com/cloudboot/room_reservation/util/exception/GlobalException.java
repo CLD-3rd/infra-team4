@@ -19,13 +19,13 @@ public class GlobalException {
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     public ResponseEntity<ErrorResult> handleUsernameExists(UsernameAlreadyExistsException e) {
         ErrorResult errorResult = new ErrorResult("UsernameExists", e.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResult);  // 409 Conflict
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResult);
     }
 
     @ExceptionHandler(PasswordMismatchException.class)
     public ResponseEntity<ErrorResult> handlePasswordMismatch(PasswordMismatchException e) {
         ErrorResult errorResult = new ErrorResult("PasswordMismatch", e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResult); // 400 Bad Request
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResult);
     }
 
     // 다른 RuntimeException은 일반 400으로 처리

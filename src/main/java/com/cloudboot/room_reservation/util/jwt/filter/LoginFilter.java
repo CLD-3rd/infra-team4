@@ -40,7 +40,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         this.setFilterProcessesUrl(loginUrl);
     }
 
-
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
