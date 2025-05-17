@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -18,7 +19,7 @@ public class JoinApiController {
         this.joinApiService = joinApiService;
     }
 
-    @PostMapping("/join")
+    @PostMapping("/api/join")
     public void join(@RequestBody @Validated JoinRequest joinRequest) {
         log.info("Join request received: {}", joinRequest);  // 로깅 추가
         joinApiService.registerMember(joinRequest);

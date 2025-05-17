@@ -59,15 +59,15 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/join", "/login", "/reissue", "/logout").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
 
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository),
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, "/api/login"),
                         UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
-                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository, "/api/logout"), UsernamePasswordAuthenticationFilter.class);
 
 
         http
@@ -82,7 +82,7 @@ public class SecurityConfig {
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
                         configuration.setMaxAge(3600L);
 
-                        configuration.setExposedHeaders(Arrays.asList("access"));
+                        configuration.setExposedHeaders(Arrays.asList("access", "redirect-url"));
 
                         return configuration;
                     }

@@ -21,10 +21,12 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
+    private final String logoutUri;
 
-    public CustomLogoutFilter(JWTUtil jwtUtil, RefreshRepository refreshRepository) {
+    public CustomLogoutFilter(JWTUtil jwtUtil, RefreshRepository refreshRepository, String logoutUri) {
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
+        this.logoutUri = logoutUri;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         // 1. 로그아웃 경로가 아니라면 다음 필터 수행
         String requestUri = request.getRequestURI();
-        if (!requestUri.matches("^\\/logout$")) {
+        if (!requestUri.equals(logoutUri)) {
 
             filterChain.doFilter(request, response);
             return;

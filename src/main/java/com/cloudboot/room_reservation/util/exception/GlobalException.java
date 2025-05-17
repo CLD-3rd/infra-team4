@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestControllerAdvice
 public class GlobalException {
@@ -35,7 +37,7 @@ public class GlobalException {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        List<String> errorResults = new ArrayList<>();
+        Set<String> errorResults = new HashSet<>();
 
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errorResults.add(error.getDefaultMessage())

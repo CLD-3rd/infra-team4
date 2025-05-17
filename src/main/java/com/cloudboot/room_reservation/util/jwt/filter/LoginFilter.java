@@ -33,10 +33,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
 
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository, String loginUrl) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
+        this.setFilterProcessesUrl(loginUrl);
     }
 
 
@@ -77,10 +78,23 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         addRefreshEntity(username, refresh, 86400000L);
 
+        String redirectUrl = findRedirectUrl(role);
+
         response.setHeader("access", access);
+        response.setHeader("redirect-url", redirectUrl);
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
 
+    }
+
+    private String findRedirectUrl(String role) {
+        log.info("LOGIN ROLE = {}", role);
+        if (role.equals("ROLE_USER")) {
+            return "func.html";
+        }
+        else {
+            return "admin/dashboard.html";
+        }
     }
 
     private void addRefreshEntity(String username, String refresh, Long expiredMs) {

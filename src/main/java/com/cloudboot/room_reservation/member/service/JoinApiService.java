@@ -33,6 +33,7 @@ public class JoinApiService {
         String username = joinRequest.getUsername();
         // 암호화 수행 (
         String password = bCryptPasswordEncoder.encode(joinRequest.getPassword());
+        log.info("encrypted password = {}", password);
 
         // JoinRequest -> JoinDTO
         JoinDTO joinDTO = JoinDTO.of(username, password);
