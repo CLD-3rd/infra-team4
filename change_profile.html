@@ -144,74 +144,18 @@
       }
     }
 
-        /* 메시지 박스 스타일 추가 */
-    .message {
-      margin-top: 1.2rem;
-      padding: 0.8rem 1rem;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      text-align: center;
-      min-height: 20px;
-      user-select: text;
-      opacity: 0;
-      max-height: 0;
-      overflow: hidden;
-      transition: all 0.4s ease;
-    }
-
-    .message.show {
-      opacity: 1;
-      max-height: 100px;
-      margin-bottom: 1rem;
-    }
-
-    .message.success {
-      background-color: #f0fdf4;
-      color: #16a34a;
-      border: 1px solid #86efac;
-    }
-
-    .message.error {
-      background-color: #fef2f2;
-      color: #dc2626;
-      border: 1px solid #fca5a5;
-    }
-
-    /* 로딩 상태 */
-    button.loading {
-      position: relative;
-      color: transparent;
-      pointer-events: none;
-    }
-
-    button.loading::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      border-top-color: white;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-
-    /* 흔들림 효과 (에러 시) */
     @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-5px); }
-      40%, 80% { transform: translateX(5px); }
-    }
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-8px); }
+  80% { transform: translateX(8px); }
+  100% { transform: translateX(0); }
+}
 
-    .shake {
-      animation: shake 0.4s ease;
-    }
+.shake {
+  animation: shake 0.4s;
+}
 
   </style>
 </head>
@@ -222,77 +166,63 @@
       <input type="password" name="originPassword" placeholder="기존 비밀번호" required />
       <input type="password" name="newPassword" placeholder="새 비밀번호" required />
       <input type="password" name="newPasswordConfirm" placeholder="비밀번호 확인" required />
-      <div id="message" class="message"></div>
-      <button type="submit" id="submitBtn">저장</button>
+      <button type="submit">저장</button>
     </form>
+
+    <div class="message" id="messageBox"></div>
+    
   </div>
+<script>
+  const accessToken = localStorage.getItem('access');
+  const form = document.getElementById('passwordForm');
+  const messageBox = document.getElementById('messageBox');
+  const container = document.querySelector('.container');
 
-  <script>
-    const accessToken = localStorage.getItem('access');
-    const form = document.getElementById('passwordForm');
-    const messageDiv = document.getElementById('message');
-    const submitBtn = document.getElementById('submitBtn');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      // 기존 메시지 숨기기
-      messageDiv.classList.remove('show', 'success', 'error');
-      
-      // 로딩 상태 활성화
-      submitBtn.classList.add('loading');
-      submitBtn.disabled = true;
+    const formData = new FormData(form);
+    const data = {
+      originPassword: formData.get('originPassword'),
+      newPassword: formData.get('newPassword'),
+      newPasswordConfirm: formData.get('newPasswordConfirm')
+    };
 
-      const formData = new FormData(e.target);
-      const data = {
-        originPassword: formData.get('originPassword'),
-        newPassword: formData.get('newPassword'),
-        newPasswordConfirm: formData.get('newPasswordConfirm')
-      };
+    try {
+      const res = await fetch('http://127.0.0.1:8080/user/update', {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'access': accessToken
+        },
+        body: JSON.stringify(data)
+      });
 
-      try {
-        const res = await fetch('http://127.0.0.1:8080/user/update', {
-          method: 'PUT',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            'access': accessToken
-          },
-          body: JSON.stringify(data)
-        });
-
-        if (res.ok) {
-          showMessage('비밀번호가 성공적으로 변경되었습니다!', 'success');
-          form.reset(); // 폼 초기화
-          setTimeout(() => {
-            window.location.href = 'func.html';
-          }, 1500);
-        } else {
-          const err = await res.json().catch(() => ({ message: '알 수 없는 오류가 발생했습니다.' }));
-          showMessage(`비밀번호 변경 실패: ${err.message || '잘못된 요청입니다.'}`, 'error');
-          form.classList.add('shake'); // 흔들림 효과
-          setTimeout(() => form.classList.remove('shake'), 500);
-        }
-      } catch (err) {
-        showMessage('서버와 연결할 수 없습니다. 네트워크 상태를 확인해주세요.', 'error');
-        console.error('요청 실패:', err);
-      } finally {
-        submitBtn.classList.remove('loading');
-        submitBtn.disabled = false;
-      }
-    });
-
-    function showMessage(text, type) {
-      messageDiv.textContent = text;
-      messageDiv.className = 'message show ' + type;
-      
-      // 5초 후 메시지 자동 숨기기 (에러만)
-      if (type === 'error') {
+      if (res.ok) {
+        messageBox.textContent = '✅ 비밀번호가 성공적으로 변경되었습니다.';
+        messageBox.className = 'message success';
         setTimeout(() => {
-          messageDiv.classList.remove('show');
-        }, 5000);
+          window.location.href = 'func.html';
+        }, 2000);
+      } else {
+        const errMsg = await res.text();
+        messageBox.textContent = '❌ 비밀번호 변경 실패: ' + errMsg;
+        messageBox.className = 'message error';
+
+        // 흔들림 효과
+        container.classList.add('shake');
+        setTimeout(() => container.classList.remove('shake'), 500);
       }
+    } catch (err) {
+      console.error('요청 실패:', err);
+      messageBox.textContent = '🚫 서버와 연결할 수 없습니다.';
+      messageBox.className = 'message error';
+
+      container.classList.add('shake');
+      setTimeout(() => container.classList.remove('shake'), 500);
     }
-  </script>
+  });
+</script>
 </body>
 </html>
