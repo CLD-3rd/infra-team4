@@ -31,7 +31,10 @@ public class ReservationService {
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 룸이 존재하지 않습니다."));
-
+        LocalDateTime now = LocalDateTime.now();
+        if (request.getStartTime().isBefore(now.plusHours(2))) {
+            throw new IllegalArgumentException("예약은 현재 시간으로부터 최소 2시간 이후부터 가능합니다.");
+        }
         // 중복 예약 방지 (동일 룸, 겹치는 시간)
         boolean exists = reservationRepository.existsByRoomAndTimeOverlap(
                 request.getRoomId(), request.getStartTime(), request.getEndTime());

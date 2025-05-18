@@ -29,17 +29,24 @@ function renderTimeSlots(date, room) {
   const reservedTimes = mockReservations[`${date}|${room}`] || [];
   const allSlots = generateTimeSlots();
 
+  const now = new Date();
+  const bufferTime = new Date(now.getTime() + 2 * 60 * 60 * 1000); // <- 여기서 2시간 뒤 계산
+
+
   allSlots.forEach(time => {
     const slotDiv = document.createElement('div');
     slotDiv.classList.add('time-slot');
     // 예약 가능 여부
-    if (reservedTimes.includes(time)) {
+    const slotDateTime = new Date(`${date}T${time}`);
+    const reserved = reservedTimes.includes(time);
+    const tooSoon = slotDateTime < bufferTime;
+
+    if (reserved || tooSoon) {
       slotDiv.classList.add('reserved');
-      slotDiv.textContent = `${time} (예약됨)`;
+      slotDiv.textContent = `${time}${reserved ? ' (예약됨)' : ' (불가)'}`;
     } else {
       slotDiv.classList.add('available');
       slotDiv.textContent = time;
-
       slotDiv.addEventListener('click', () => {
         // 선택 UI
         document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
