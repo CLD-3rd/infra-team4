@@ -9,8 +9,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     #url: jdbc:mysql://127.0.0.1:3306/security?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     url: jdbc:mysql://mysql-container:3306/security?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-    username: root
-    password: "1234"  # 숫자만 있는 경우 따옴표로 감싸는 것이 안전
+    username: app
+    password: app # 숫자만 있는 경우 따옴표로 감싸는 것이 안전
 
   jpa:
     hibernate:
