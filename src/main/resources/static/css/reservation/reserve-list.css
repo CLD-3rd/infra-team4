@@ -1,0 +1,57 @@
+/* reserve-list.css */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f6f8;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  color: #2563eb;
+  margin-bottom: 30px;
+}
+
+.reservation-card {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-left: 5px solid #2563eb;
+  padding: 16px 20px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.reservation-card .row {
+  margin: 6px 0;
+}
+
+.reservation-card .label {
+  font-weight: bold;
+  color: #555;
+}
+
+.cancel-btn {
+  margin-top: 10px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* 비활성화된 취소 버튼은 회색 */
+.cancel-btn:disabled {
+  background-color: #d1d5db;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+.cancel-btn:hover {
+  background-color: #dc2626;
+}

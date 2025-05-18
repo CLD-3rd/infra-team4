@@ -1,4 +1,5 @@
-package com.cloudboot.room_reservation.member.entity;
+package com.cloudboot.room_reservation.room.entity;
+
 
 import com.cloudboot.room_reservation.reservation.entity.Reservation;
 import jakarta.persistence.*;
@@ -7,20 +8,19 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Table(name = "member")
+@Table(name = "room")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Member {
+public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
-    private Long memberId;
+    @Column(name = "room_id")
+    private Long roomId;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations;
-
 }
