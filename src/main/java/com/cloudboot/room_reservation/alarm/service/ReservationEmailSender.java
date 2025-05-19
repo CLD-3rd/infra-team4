@@ -13,14 +13,18 @@ import com.cloudboot.room_reservation.member.entity.Member;
 import com.cloudboot.room_reservation.member.enumerate.Role;
 import com.cloudboot.room_reservation.reservation.entity.Reservation;
 import com.cloudboot.room_reservation.reservation.enumerate.ReservationStatus;
+import com.cloudboot.room_reservation.reservation.repository.ReservationRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReservationEmailSender {
 
 	private final EmailService emailService;
+	private final ReservationRepository reservationRepository;
 	
 	final String RESERVATION_SUBJECT = "[스터디룸 예약시스템] 📢 예약 알림 안내";
 
@@ -67,7 +71,24 @@ public class ReservationEmailSender {
 				ReservationMailStatus.valueOf(reservation.getStatus().toString()), 
 				reservation);
 	}
+	
+	/**
+	 * 10분 전 예약 알림 전송
+	 */
+	public void sendReminder(String to) {
+		// 1. 시작 10분 전 예약 조회 (전송 딜레이 오차 허용)
+		LocalDateTime now = LocalDateTime.now();
+		List<Reservation> reservations = reservationRepository.findByStartTimeBetween(now.plusMinutes(9), now.plusMinutes(11));
 		
+		reservations.forEach(reservation -> {
+			
+			// 2. 전송
+			send(reservation.getUsername(), 
+					ReservationMailStatus.REMINDER, 
+					reservation);
+		});
+	}
+	
 
 	private void send(String to, ReservationMailStatus status, Reservation reservation) {
 		

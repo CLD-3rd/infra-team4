@@ -22,7 +22,7 @@ public class EmailController {
 	
 	/**
 	 * 예약 승인 이메일 전송 테스트
-	 * @param to 받는사람 이메일주소
+	 * @param emailRequest 받는사람 이메일주소
 	 * @return
 	 */
 	@PostMapping("/approved")
@@ -34,7 +34,7 @@ public class EmailController {
 	
 	/**
 	 * 예약 취소 이메일 전송 테스트
-	 * @param to
+	 * @param emailRequest 받는사람 이메일주소
 	 * @return
 	 */
 	@PostMapping("/canceled")
@@ -46,13 +46,25 @@ public class EmailController {
 	
 	/**
 	 * 예약 거절 이메일 전송 테스트
-	 * @param to
+	 * @param emailRequest 받는사람 이메일주소
 	 * @return
 	 */
 	@PostMapping("/rejected")
 	public ResponseEntity<?> rejected(@RequestBody EmailRequest emailRequest) {
 		
 		emailSender.sendRejectedTest(emailRequest.getTo());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	/**
+	 * 예약 10분 전 이메일 전송 테스트
+	 * @param emailRequest 받는사람 이메일주소
+	 * @return
+	 */
+	@PostMapping("/reminder")
+	public ResponseEntity<?> reminder(@RequestBody EmailRequest emailRequest) {
+		
+		emailSender.sendReminder(emailRequest.getTo());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
