@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* 애니메이션 정의 */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.validation-msg {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+}
+
+.invalid {
+    color: red;
+    margin-right: 5px;
+}
+
+.valid {
+    color: green;
+    margin-right: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+.message {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.message.error {
+    color: red;
+}
+
+.message.success {
+    color: green;
+}
+
+.container {
+    max-width: 400px;
+    margin: auto;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1rem;
+}
+
+.tab {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.tab.active {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #6b8ce3 0%, #3a54e8 100%);
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #222;
+}
+
+.psr-logo {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-weight: 900;
+    font-size: 32px;
+    color: #fff;
+    user-select: none;
+    cursor: pointer;
+    text-shadow: 0 0 10px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease, color 0.3s ease;
+    z-index: 1001;
+    animation: fadeInUp 1s ease-out;
+}
+
+.psr-logo:hover {
+    color: #d0d8ff;
+    transform: scale(1.1);
+    text-shadow: 0 0 15px rgba(255,255,255,0.8);
+}
+
+.container {
+    background: #fff;
+    padding: 3rem 2.5rem 2.5rem;
+    border-radius: 12px;
+    width: 380px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    user-select: none;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+h2 {
+    margin-bottom: 2rem;
+    font-weight: 900;
+    font-size: 1.8rem;
+    color: #3a54e8;
+    letter-spacing: 1px;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 2rem;
+    border-bottom: 3px solid #e0e0e0;
+}
+
+.tab {
+    flex: 1;
+    font-weight: 700;
+    padding: 0.7rem 0;
+    cursor: pointer;
+    color: #777;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    user-select: none;
+    font-size: 1.1rem;
+}
+
+.tab:hover {
+    color: #4f6ef7;
+}
+
+.tab.active {
+    border-color: #3a54e8;
+    color: #3a54e8;
+    box-shadow: inset 0 -3px 0 #3a54e8;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+    color: #444;
+}
+
+input {
+    padding: 0.8rem 1rem;
+    margin-bottom: 1.4rem;
+    font-size: 1rem;
+    border: 1.8px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    outline: none;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+input::placeholder {
+    color: #bbb;
+}
+
+input:focus {
+    border-color: #3a54e8;
+    box-shadow: 0 0 8px rgba(58, 84, 232, 0.4);
+}
+
+button {
+    background: linear-gradient(135deg, #3a54e8 0%, #6b8ce3 100%);
+    color: white;
+    font-weight: 700;
+    padding: 0.85rem 0;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.4s ease;
+    box-shadow: 0 5px 15px rgba(58, 84, 232, 0.4);
+    user-select: none;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #243bb8 0%, #4253d4 100%);
+    box-shadow: 0 6px 20px rgba(36, 59, 184, 0.7);
+}
+
+.message {
+    margin-top: 1.2rem;
+    font-size: 0.95rem;
+    text-align: center;
+    min-height: 20px;
+    user-select: text;
+}
+
+.message.success {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.message.error {
+    color: #dc2626;
+    font-weight: 600;
+}

@@ -48,6 +48,7 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -58,10 +59,26 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable);
 
         http
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/user-dashboard.html",
+                                "/my-profile.html",
+                                "change-password.html",
+                                "admin-dashboard.html",
+                                "member-manage.html",
+                                "/css/**",       // CSS 파일 경로 허용
+                                "/js/**",        // JS 파일 경로 허용
+                                "/images/**",    // 이미지 파일 경로 허용
+                                "/api/join",
+                                "/api/login",
+                                "/reissue",
+                                "/api/logout"
+                        ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated());
+                        .anyRequest().authenticated()
+                );
 
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, "/api/login"),
@@ -76,13 +93,13 @@ public class SecurityConfig {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration configuration = new CorsConfiguration();
 
-                        configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500"));
+                        configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500", "http://127.0.0.1:8080", "http://localhost:8080"));
                         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
                         configuration.setMaxAge(3600L);
 
-                        configuration.setExposedHeaders(Arrays.asList("access", "redirect-url"));
+                        configuration.setExposedHeaders(Arrays.asList("access", "redirect-url", "Authorization"));
 
                         return configuration;
                     }

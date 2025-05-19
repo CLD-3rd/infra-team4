@@ -90,10 +90,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private String findRedirectUrl(String role) {
         log.info("LOGIN ROLE = {}", role);
         if (role.equals("ROLE_USER")) {
-            return "func.html";
+            return "user-dashboard.html";
         }
         else {
-            return "admin/dashboard.html";
+            return "admin-dashboard.html";
         }
     }
 
@@ -110,7 +110,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         cookie.setMaxAge(24*60*60);
 //        cookie.setSecure(true);
         cookie.setPath("/");
-        cookie.setDomain("127.0.0.1");
+//        cookie.setDomain("127.0.0.1");
         cookie.setHttpOnly(true);
 
         return cookie;
