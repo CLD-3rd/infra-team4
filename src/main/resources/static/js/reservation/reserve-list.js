@@ -9,7 +9,8 @@ function formatDateTime(dateStr) {
   const month = date.getMonth() + 1;
   const day = date.getDate();
   const hour = date.getHours();
-  return `${year}년 ${month}월 ${day}일 ${hour}시`;
+  const minute = date.getMinutes().toString().padStart(2, '0');
+  return `${year}년 ${month}월 ${day}일 ${hour}시 ${minute}분`;
 }
 
 // 상태를 한글로

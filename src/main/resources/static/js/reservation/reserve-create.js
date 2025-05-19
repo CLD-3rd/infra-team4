@@ -74,7 +74,7 @@ roomButtons.forEach(button => {
   });
 });
 
-// 4. 예약 버튼 클릭
+//4. 예약 버튼 클릭
 reserveBtn.addEventListener('click', () => {
   if (selectedTime && reservationDateInput.value && selectedRoom) {
     const roomIdMap = {
@@ -83,13 +83,18 @@ reserveBtn.addEventListener('click', () => {
       Room3: 103
     };
     const roomId = roomIdMap[selectedRoom];
-    const memberId = 1; // TODO: 실제 로그인 사용자 ID로 교체
+    const memberId = 1; // 실제 로그인 사용자 ID로 교체
 
     const startTime = `${reservationDateInput.value}T${selectedTime}`;
     const [hour, minute] = selectedTime.split(':').map(Number);
-    const endDate = new Date(reservationDateInput.value + "T" + selectedTime);
-    endDate.setHours(hour + 1);
-    const endTime = endDate.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm
+
+    // 종료 시간 직접 계산 (1시간 후)
+    const endDate = new Date(`${reservationDateInput.value}T${selectedTime}`);
+    endDate.setHours(endDate.getHours() + 1);
+
+    // 로컬 기준 YYYY-MM-DDTHH:mm 포맷
+    const pad = n => n.toString().padStart(2, '0');
+    const endTime = `${endDate.getFullYear()}-${pad(endDate.getMonth() + 1)}-${pad(endDate.getDate())}T${pad(endDate.getHours())}:${pad(endDate.getMinutes())}`;
 
     const reservationData = {
       roomId,
@@ -97,12 +102,13 @@ reserveBtn.addEventListener('click', () => {
       startTime,
       endTime
     };
+
     console.log("예약 데이터: ", JSON.stringify(reservationData));
     fetch("/api/reservations", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // "access": localStorage.getItem("accessToken") || "" // 필요시 토큰
+        // "access": localStorage.getItem("accessToken") || ""
       },
       body: JSON.stringify(reservationData)
     })
@@ -115,15 +121,14 @@ reserveBtn.addEventListener('click', () => {
         document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
         selectedTime = null;
         reserveBtn.style.display = 'none';
-        renderTimeSlots(reservationDateInput.value, selectedRoom); // 새로고침
+        renderTimeSlots(reservationDateInput.value, selectedRoom);
       })
       .catch(err => {
-        alert(" 예약 요청 중 오류 발생");
+        alert("예약 요청 중 오류 발생");
         console.error(err);
       });
   }
 });
-
 
 // 5. 초기 렌더링
 const today = new Date().toISOString().slice(0, 10);
