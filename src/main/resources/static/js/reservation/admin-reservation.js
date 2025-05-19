@@ -3,7 +3,7 @@ const adminListContainer = document.getElementById("admin-reservation-list");
 function formatDateTime(dateStr) {
   const date = new Date(dateStr);
   if (isNaN(date)) return dateStr;
-  return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 ${date.getHours()}시`;
+  return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 ${date.getHours()}시 ${date.getMinutes()}분`;
 }
 
 function translateStatus(status) {
