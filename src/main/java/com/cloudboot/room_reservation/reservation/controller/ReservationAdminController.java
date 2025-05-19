@@ -6,7 +6,7 @@ import com.cloudboot.room_reservation.reservation.entity.Reservation;
 import com.cloudboot.room_reservation.reservation.service.ReservationAdminService;
 
 @RestController
-@RequestMapping("/admin/reservations")
+@RequestMapping("/api/admin/reservations")
 public class ReservationAdminController {
     private final ReservationAdminService service;
     public ReservationAdminController(ReservationAdminService service) { this.service = service; }

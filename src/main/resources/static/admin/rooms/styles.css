@@ -1,0 +1,187 @@
+/* 배경 & 폰트 */
+body {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #6b8ce3 0%, #3a54e8 100%);
+  margin: 0;
+  min-height: 100vh;
+  color: #222;
+}
+
+/* 로고 */
+.psr-logo {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-weight: 900;
+  font-size: 32px;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.3s, color 0.3s;
+}
+.psr-logo:hover {
+  color: #d0d8ff;
+  transform: scale(1.1);
+}
+
+/* 프로필 */
+.profile-wrapper {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 1001;
+}
+.profile-pic {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 2px solid #2563eb;
+  cursor: pointer;
+  transition: box-shadow 0.3s, transform 0.2s;
+}
+.profile-pic:hover {
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.8);
+  transform: scale(1.1);
+}
+.profile-menu {
+  position: absolute;
+  top: 54px; right: 0;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-radius: 6px;
+  width: 140px;
+  display: none;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.profile-menu.active {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+.profile-menu button {
+  background: none; border: none;
+  padding: 10px 15px; text-align: left;
+  font-weight: 600; color: #111827; cursor: pointer;
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.2s;
+}
+.profile-menu button:last-child {
+  border-bottom: none;
+}
+.profile-menu button:hover {
+  background-color: #f3f4f6;
+}
+
+/* 중앙 컨테이너 */
+.container {
+  max-width: 900px;
+  margin: 120px auto 40px;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* 제목 */
+.container h1 {
+  font-size: 1.8rem;
+  color: #3a54e8;
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* 카드 스타일(등록 폼) */
+.card {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+.input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+/* 버튼 공통 */
+.btn {
+  background: linear-gradient(135deg, #3a54e8 0%, #6b8ce3 100%);
+  color: #fff;
+  font-weight: 700;
+  padding: 0.85rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.4s, box-shadow 0.2s;
+}
+.btn:hover {
+  background: linear-gradient(135deg, #243bb8 0%, #4253d4 100%);
+  box-shadow: 0 6px 20px rgba(36,59,184,0.7);
+}
+
+/* 룸 목록 그리드 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+  gap: 1rem;
+}
+.room-card {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.room-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  color: #333;
+}
+.room-card .actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* 모달 */
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 8px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 500px;
+}
+.modal-content h2 {
+  margin-top: 0;
+}
+.modal-content ul {
+  list-style: none;
+  padding: 0;
+}
+.modal-content li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* 애니메이션 */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hidden { display: none !important; }
