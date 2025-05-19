@@ -4,6 +4,7 @@ import com.cloudboot.room_reservation.member.dto.CustomMemberDetails;
 import com.cloudboot.room_reservation.member.dto.MemberDTO;
 import com.cloudboot.room_reservation.member.entity.Member;
 import com.cloudboot.room_reservation.member.repository.MemberRepository;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,7 +25,7 @@ public class CustomerMemberDetailsService implements UserDetailsService {
         Member findMember = memberRepository.findByUsername(username);
 
         if (findMember == null) {
-            throw new RuntimeException("존재하지 않는 회원입니다.");
+            throw new BadCredentialsException("존재하지 않는 아이디입니다.");
         }
 
         MemberDTO memberDTO = MemberDTO.from(findMember);

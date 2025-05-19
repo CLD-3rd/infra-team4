@@ -5,6 +5,7 @@ import com.cloudboot.room_reservation.member.dto.CustomMemberDetails;
 import com.cloudboot.room_reservation.member.dto.request.LoginRequest;
 import com.cloudboot.room_reservation.member.entity.RefreshToken;
 import com.cloudboot.room_reservation.member.repository.RefreshRepository;
+import com.cloudboot.room_reservation.util.exception.ErrorResult;
 import com.cloudboot.room_reservation.util.jwt.util.JWTUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -118,7 +119,27 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        throw new RuntimeException("로그인에 실패하였습니다.");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+
+        ErrorResult errorResult;
+
+        // 예외 메시지에 따라 분기
+        String message = failed.getMessage();
+
+        if ("존재하지 않는 아이디입니다.".equals(message)) {
+            errorResult = new ErrorResult("UsernameNotFound", message);
+        } else if ("비밀번호가 일치하지 않습니다.".equals(message)) {
+            errorResult = new ErrorResult("PasswordMismatch", message);
+        } else {
+            errorResult = new ErrorResult("LoginFailed", "로그인 실패: 알 수 없는 오류");
+        }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String result = objectMapper.writeValueAsString(errorResult);
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write(result);
     }
 
     private static String getRole(CustomMemberDetails memberDetails) {
