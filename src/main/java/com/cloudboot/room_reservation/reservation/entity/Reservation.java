@@ -63,10 +63,10 @@ public class Reservation {
 
 
 
-	public Reservation(Long reservationId, int roomNumber, LocalDateTime starTime, LocalDateTime endTime, ReservationStatus reservationStatus, Member member) {
+	public Reservation(Long reservationId, Room roomNumber, LocalDateTime startTime, LocalDateTime endTime, ReservationStatus reservationStatus, Member member) {
 		this.reservationId = reservationId;
-		this.room = new Room(1L, roomNumber);
-		this.startTime = starTime;
+		this.room = room;
+		this.startTime = startTime;
 		this.endTime = endTime;
 		this.status = reservationStatus;
 		this.member = member;

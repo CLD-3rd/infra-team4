@@ -58,7 +58,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/api/join", "/api/login", "/reissue", "/api/logout", "/alarm").permitAll()
+                        .requestMatchers("/", "/api/join", "/api/login", "/reissue", "/api/logout", "/mail/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll()); // 0519 임시
 

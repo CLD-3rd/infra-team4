@@ -15,6 +15,7 @@ import com.cloudboot.room_reservation.member.enumerate.Role;
 import com.cloudboot.room_reservation.reservation.entity.Reservation;
 import com.cloudboot.room_reservation.reservation.enumerate.ReservationStatus;
 import com.cloudboot.room_reservation.reservation.repository.ReservationRepository;
+import com.cloudboot.room_reservation.room.entity.Room;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -118,7 +119,7 @@ public class ReservationEmailSender {
 	private Reservation createReservation(String to, ReservationStatus status) {
 		return new Reservation(
 				1L,
-				202, 
+				new Room(1L, 202), 
 				LocalDateTime.now(), 
 				LocalDateTime.now().plusHours(2), 
 				status,
