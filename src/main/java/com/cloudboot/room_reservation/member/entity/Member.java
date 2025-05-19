@@ -1,6 +1,7 @@
 package com.cloudboot.room_reservation.member.entity;
 import com.cloudboot.room_reservation.member.enumerate.Role;
 import com.cloudboot.room_reservation.reservation.entity.Reservation;
+import com.cloudboot.room_reservation.util.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,8 +13,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @Builder
-public class Member {
-
+public class Member extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")

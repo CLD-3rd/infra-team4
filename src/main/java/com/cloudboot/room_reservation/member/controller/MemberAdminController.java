@@ -3,6 +3,10 @@ package com.cloudboot.room_reservation.member.controller;
 import com.cloudboot.room_reservation.member.dto.request.UpdateMemberRoleRequest;
 import com.cloudboot.room_reservation.member.dto.response.MemberAdminResponse;
 import com.cloudboot.room_reservation.member.service.MemberAdminService;
+import com.cloudboot.room_reservation.util.global.PagedApiResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +24,14 @@ public class MemberAdminController {
 
     // 회원 전체 조회
     @GetMapping("/admin/members")
-    public ResponseEntity<List<MemberAdminResponse>> findAllMembers() {
-        return ResponseEntity.status(HttpStatus.OK).body(memberAdminService.findAllMembers());
+    public ResponseEntity<PagedApiResponse<MemberAdminResponse>> findAllMembers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
 
+        Pageable pageable = PageRequest.of(page, size);
+        Page<MemberAdminResponse> result = memberAdminService.findAllMembers(pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body((PagedApiResponse.of(result)));
     }
 
     // 특정 회원 조회

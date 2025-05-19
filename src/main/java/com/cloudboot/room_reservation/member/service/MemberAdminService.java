@@ -6,6 +6,8 @@ import com.cloudboot.room_reservation.member.dto.response.MemberResponse;
 import com.cloudboot.room_reservation.member.entity.Member;
 import com.cloudboot.room_reservation.member.enumerate.Role;
 import com.cloudboot.room_reservation.member.repository.MemberRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +24,9 @@ public class MemberAdminService {
         this.memberRepository = memberRepository;
     }
 
-    public List<MemberAdminResponse> findAllMembers() {
-        return memberRepository.findAll().stream()
-                .map(MemberAdminResponse::from)
-                .collect(Collectors.toList());
+    public Page<MemberAdminResponse> findAllMembers(Pageable pageable) {
+        return memberRepository.findAll(pageable)
+                .map(MemberAdminResponse::from);
     }
 
     public MemberAdminResponse findOne(Long memberId) {
