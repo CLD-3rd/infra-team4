@@ -56,29 +56,43 @@ public class SecurityConfig {
                 .logout(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable);
-
-        http
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/",
-                                "/index.html",
-                                "/user-dashboard.html",
-                                "/my-profile.html",
-                                "change-password.html",
-                                "admin-dashboard.html",
-                                "member-manage.html",
-                                "/css/**",       // CSS 파일 경로 허용
-                                "/js/**",        // JS 파일 경로 허용
-                                "/images/**",    // 이미지 파일 경로 허용
-                                "/api/join",
-                                "/api/login",
-                                "/reissue",
-                                "/api/logout"
+                                "/", "/css/**", "/js/**", "/images/**", "/index.html",
+                                "/api/join", "/api/login", "/reissue", "/api/logout"
                         ).permitAll()
+                        .requestMatchers("/api/member").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) ->
+                                response.sendRedirect("/index.html")
+                        )
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                response.sendRedirect("/index.html")
+                        )
                 );
+
+
+
+//          http
+//                          .authorizeHttpRequests(auth -> auth
+//                                  .requestMatchers(
+//                                          "/", "/index.html",
+//                                          "/css/**", "/js/**", "/images/**",
+//                                          "/api/join", "/api/login", "/reissue", "/api/logout"
+//                                  ).permitAll()
+//
+//                                  .requestMatchers("/user-dashboard.html", "/my-profile.html", "/api/**").hasRole("USER")
+//
+//                                  .requestMatchers("/admin/**", "admin-dashboard.html", "member-manage.html").hasRole("ADMIN")
+//
+//                                  .anyRequest().authenticated()
+//                          );
+
 
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, "/api/login"),

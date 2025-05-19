@@ -83,6 +83,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setHeader("access", access);
         response.setHeader("redirect-url", redirectUrl);
         response.addCookie(createCookie("refresh", refresh));
+        response.addCookie(createCookie("access", access));
         response.setStatus(HttpStatus.OK.value());
 
     }

@@ -7,6 +7,7 @@ import com.cloudboot.room_reservation.util.jwt.util.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +28,20 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+
         String accessToken = request.getHeader("access");
         log.info("accessToken = {}", accessToken);
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("access")) {
+                    accessToken = cookie.getValue();
+                    log.info("accessToken By Cookie = {}", accessToken);
+                }
+            }
+        }
 
         // access Token 없으면 다음 필터 이동
         if (accessToken == null) {
