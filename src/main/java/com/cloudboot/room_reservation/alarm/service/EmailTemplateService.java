@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
+
+import com.cloudboot.room_reservation.util.exception.ApiException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,8 +35,8 @@ public class EmailTemplateService {
 			return html;
 			
 		} catch (IOException e) {
-			// TODO 에러핸들러 수정
-			throw new RuntimeException("파일을 가져오는 데에 실패하였습니다.", e);
+			log.error("이메일 템플릿 파일 로딩 중 예외 발생", e);
+			throw new ApiException(HttpStatus.BAD_REQUEST, "파일을 가져오는 데에 실패하였습니다.");
 		}
 	}
 

@@ -47,5 +47,12 @@ public class GlobalException {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(errorResults);
     }
+    
+    @ExceptionHandler(value = (ApiException.class))
+    public ResponseEntity<ErrorResult> handleApiExceptioin(ApiException e) {
+		return ResponseEntity
+				.status(e.getHttpStatus())
+				.body(new ErrorResult("RuntimeException", e.getMessage()));
+	}
 
 }

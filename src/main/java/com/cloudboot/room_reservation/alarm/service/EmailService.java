@@ -3,9 +3,12 @@ package com.cloudboot.room_reservation.alarm.service;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import com.cloudboot.room_reservation.util.exception.ApiException;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +43,8 @@ public class EmailService {
 			mailSender.send(message.getMimeMessage());
 			
 		} catch (MessagingException e) {
-			// TODO 에러핸들러
-			log.error("메일 전송에 실패하였습니다.", e.getMessage(), e);
+			log.error("메일 전송 중 예외 발생", e);
+			throw new ApiException(HttpStatus.BAD_REQUEST, "메일 전송에 실패하였습니다.");
 		}
 	}
 }
