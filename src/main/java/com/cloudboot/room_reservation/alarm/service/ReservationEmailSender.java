@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.cloudboot.room_reservation.alarm.enumerate.ReservationMailStatus;
@@ -32,8 +33,7 @@ public class ReservationEmailSender {
 	public void sendApprovedTest(String to) {
 		Reservation reservation = createReservation(to, ReservationStatus.APPROVED);
 
-		send(reservation.getMember().getUsername(), 
-				ReservationMailStatus.valueOf(reservation.getStatus().toString()), 
+		send(ReservationMailStatus.valueOf(reservation.getStatus().toString()), 
 				reservation);
 	}
 
@@ -42,8 +42,7 @@ public class ReservationEmailSender {
 	public void sendCanceledTest(String to) {
 		Reservation reservation = createReservation(to, ReservationStatus.CANCELED);
 
-		send(reservation.getMember().getUsername(), 
-				ReservationMailStatus.valueOf(reservation.getStatus().toString()), 
+		send(ReservationMailStatus.valueOf(reservation.getStatus().toString()), 
 				reservation);
 		
 	}
@@ -51,26 +50,10 @@ public class ReservationEmailSender {
 	public void sendRejectedTest(String to) {
 		Reservation reservation = createReservation(to, ReservationStatus.REJECTED);
 
-		send(reservation.getMember().getUsername(), 
-				ReservationMailStatus.valueOf(reservation.getStatus().toString()), 
+		send(ReservationMailStatus.valueOf(reservation.getStatus().toString()), 
 				reservation);
 		
 	}	
-	
-	/**
-	 * 예약 알림 전송
-	 * - 승인 알림
-	 * - 거절 알림
-	 * - 취소 알림
-	 * 
-	 * @param reservation
-	 */
-	public void send(Reservation reservation) {
-	
-		send(reservation.getMember().getUsername(), 
-				ReservationMailStatus.valueOf(reservation.getStatus().toString()), 
-				reservation);
-	}
 	
 	/**
 	 * 10분 전 예약 알림 전송
@@ -83,18 +66,28 @@ public class ReservationEmailSender {
 		reservations.forEach(reservation -> {
 			
 			// 2. 전송
-			send(reservation.getUsername(), 
-					ReservationMailStatus.REMINDER, 
+			send(ReservationMailStatus.REMINDER, 
 					reservation);
 		});
 	}
 	
 
-	private void send(String to, ReservationMailStatus status, Reservation reservation) {
-		
-		emailService.sendTemplate(to, RESERVATION_SUBJECT, resourceBy(status), dataFrom(reservation));
-	}
-
+    @Async
+    public void sendReminderAsync(Reservation reservation) {
+        emailService.sendTemplate(
+                reservation.getUsername(), 
+                RESERVATION_SUBJECT,
+                resourceBy(ReservationMailStatus.REMINDER),
+                dataFrom(reservation)
+        );
+    }
+    
+    private void send(ReservationMailStatus status, Reservation reservation) {
+    	emailService.sendTemplate(reservation.getUsername(), 
+    			RESERVATION_SUBJECT, 
+    			resourceBy(status), 
+    			dataFrom(reservation));
+    }
 
 	private String resourceBy(ReservationMailStatus status) {
 		return switch (status) {

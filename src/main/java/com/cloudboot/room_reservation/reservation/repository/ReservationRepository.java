@@ -1,6 +1,5 @@
 package com.cloudboot.room_reservation.reservation.repository;
 
-import com.cloudboot.room_reservation.alarm.dto.EmailReservationDto;
 import com.cloudboot.room_reservation.reservation.entity.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -31,13 +30,4 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     		+ "WHERE r.startTime BETWEEN :start and :end")
     List<Reservation> findByStartTimeBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
     
-    
-//    @Query("SELECT new EmailReservationDto(" +
-//    	       "r.id, m.username, rm.roomNumber, r.startTime, r.endTime, r.status) " +
-//    	       "FROM Reservation r " +
-//    	       "JOIN r.member m " +
-//    	       "JOIN r.room rm " +
-//    	       "WHERE r.startTime >= start and r.startTime <= end")
-//    List<EmailReservationDto> findAllByStartTimeBetween(LocalDateTime start, LocalDateTime end);
-
 }
