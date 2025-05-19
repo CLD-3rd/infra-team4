@@ -9,12 +9,14 @@ import java.util.Map.Entry;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 import com.cloudboot.room_reservation.util.exception.ApiException;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service
 public class EmailTemplateService {
 	
 	private static final String MAIL_TEMPLATE_PATH = "/templates/mail/";

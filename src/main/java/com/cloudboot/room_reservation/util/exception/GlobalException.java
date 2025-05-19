@@ -49,10 +49,10 @@ public class GlobalException {
     }
     
     @ExceptionHandler(value = (ApiException.class))
-    public ResponseEntity<ErrorResult> handleApiExceptioin(ApiException e) {
+    public ResponseEntity<ErrorResult> handleApiException(ApiException e) {
 		return ResponseEntity
 				.status(e.getHttpStatus())
-				.body(new ErrorResult("RuntimeException", e.getMessage()));
+				.body(new ErrorResult(String.valueOf(e.getHttpStatus().value()), e.getMessage()));
 	}
 
 }

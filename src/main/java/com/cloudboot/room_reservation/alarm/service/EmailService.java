@@ -35,6 +35,7 @@ public class EmailService {
 		String template = templateService.emailTemplate(resourceName + HTML_SUFFIX, data);
 		
 		try {
+			log.info("to: {}", to);
 			message.setTo(to);
 			message.setFrom(mailFrom);
 			message.setSubject(subject);
