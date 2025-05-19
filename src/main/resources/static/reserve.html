@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>스터디룸 예약</title>
+    <link rel="stylesheet" href="/css/reservation/reserve.css" />
+</head>
+<body>
+<div class="psr-logo">PSR</div>
+
+<div class="profile-wrapper" id="profileWrapper">
+    <img class="profile-pic" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="프로필" />
+    <div class="profile-menu" id="profileMenu">
+        <button id="profileSettingsBtn">프로필 설정</button>
+        <button id="myReservationsBtn">내 예약 보기</button>
+        <button id="logoutBtn">로그아웃</button>
+    </div>
+</div>
+<!-- 예약 섹션 -->
+<h1>스터디룸 예약</h1>
+
+<label for="reservation-date">예약 날짜 선택</label>
+<input type="date" id="reservation-date" />
+
+<div class="room-buttons" id="room-buttons">
+    <button class="room-button active" data-room="Room1">Room1</button>
+    <button class="room-button" data-room="Room2">Room2</button>
+    <button class="room-button" data-room="Room3">Room3</button>
+</div>
+
+<div class="time-slots" id="time-slots"></div>
+
+<button id="reserve-btn" style="display:none;">예약하기</button>
+
+<script src="/js/main/profile-menu.js"></script>
+<script src="/js/reservation/reserve-create.js"></script>
+</body>
+</html>
+

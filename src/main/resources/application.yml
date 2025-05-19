@@ -1,12 +1,15 @@
 spring:
   application:
     name: room-reservation
+  profiles:
+    active: local
   jwt:
     secret: "6fmZPo9Ep9SFkLMnm7gSfz6UijdfbsSDW2dfsiZBaS"
 
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+
     url: jdbc:mysql://127.0.0.1:3306/security?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     #url: jdbc:mysql://mysql-container:3306/security?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     username: root

@@ -1,5 +1,4 @@
 package com.cloudboot.room_reservation.util.config;
-
 import com.cloudboot.room_reservation.member.repository.RefreshRepository;
 import com.cloudboot.room_reservation.util.jwt.filter.CustomLogoutFilter;
 import com.cloudboot.room_reservation.util.jwt.filter.JWTFilter;
@@ -94,10 +93,11 @@ public class SecurityConfig {
 //                          );
 
 
+
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, "/api/login"),
                         UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
+                //.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class) 0519 임시
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository, "/api/logout"), UsernamePasswordAuthenticationFilter.class);
 
 
