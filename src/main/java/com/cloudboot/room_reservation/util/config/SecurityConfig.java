@@ -59,13 +59,14 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        //.requestMatchers("/api/admin/reservations/**").hasRole("ADMIN")
+                        //.requestMatchers("/api/reservations/**").hasRole("USER")
                         .anyRequest().permitAll()); // 0519 임시
 
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, "/api/login"),
                         UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
+                //.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class) 0519 임시
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository, "/api/logout"), UsernamePasswordAuthenticationFilter.class);
 
 
