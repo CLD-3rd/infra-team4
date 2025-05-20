@@ -63,6 +63,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/html/auth/**", "/html/main/**", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
+                        .requestMatchers(  "/html/room-manage/**", "/css/room-manage/**", "/js/room-manage/**").permitAll()
 
                         // 사용자
                         .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/index.html",
