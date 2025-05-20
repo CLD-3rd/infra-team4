@@ -30,4 +30,11 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     		+ "WHERE r.startTime BETWEEN :start and :end")
     List<Reservation> findByStartTimeBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
     
+    
+    @Query("select r FROM Reservation r "
+    		+ "JOIN FETCH r.member "
+    		+ "JOIN FETCH r.room "
+    		+ "WHERE r.reservationId = :reservationId")
+    Reservation findByReservationId(@Param("reservationId") Long reservationId);
+    
 }
