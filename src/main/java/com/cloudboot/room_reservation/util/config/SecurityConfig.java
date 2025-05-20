@@ -69,7 +69,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                 		.requestMatchers("/").permitAll()
-                        .requestMatchers("/auth/**", "/main/**", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
+                		.requestMatchers("/html/auth/**", "/html/main/**", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
                         .requestMatchers(  "/html/room-manage/**", "/css/room-manage/**", "/js/room-manage/**").permitAll()
 
                         // 사용자
