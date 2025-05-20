@@ -66,7 +66,7 @@ public class JWTFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        // 3. access token 만료되었는지 확인
+
         try {
             jwtUtil.isExpired(accessToken);
         } catch (ExpiredJwtException e) {

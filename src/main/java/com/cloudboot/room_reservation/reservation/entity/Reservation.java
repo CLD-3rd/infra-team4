@@ -37,7 +37,7 @@ public class Reservation {
     private LocalDateTime endTime;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = true, columnDefinition = "VARCHAR(20) DEFAULT 'PENDING'")
+    @Column(name = "status", columnDefinition = "VARCHAR(20) DEFAULT 'PENDING'")
     private ReservationStatus status = ReservationStatus.PENDING;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -51,24 +51,12 @@ public class Reservation {
         this.updatedAt = LocalDateTime.now();
     }
 
-	
-	
-	public String getUsername() {
-		return this.member.getUsername();
-	}
-	
-	public Long getRoomNumber() {
-		return this.room.getRoomNumber();
-	}
+    // 편의 메서드
+    public String getUsername() {
+        return this.member.getUsername();
+    }
 
-
-
-	public Reservation(Long reservationId, Room room, LocalDateTime startTime, LocalDateTime endTime, ReservationStatus reservationStatus, Member member) {
-		this.reservationId = reservationId;
-		this.room = room;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.status = reservationStatus;
-		this.member = member;
-	}
+    public String getRoomNumber() {
+        return this.room.getRoomNumber();
+    }
 }

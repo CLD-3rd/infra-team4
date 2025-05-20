@@ -1,6 +1,5 @@
 package com.cloudboot.room_reservation.room.entity;
 
-
 import com.cloudboot.room_reservation.reservation.entity.Reservation;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,12 +20,13 @@ public class Room {
     @Column(name = "room_id")
     private Long roomId;
     
-    @Column(name = "room_number")
-    private Long roomNumber;
+    @Column(name = "room_number", unique = true, nullable = false)
+    private String roomNumber;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations;
-    public Room(Long id, Long roomNumber) {
+
+    public Room(Long id, String roomNumber) {
         this.roomId = id;
         this.roomNumber = roomNumber;
     }
