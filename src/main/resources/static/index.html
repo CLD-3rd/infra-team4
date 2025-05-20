@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cloud Engineering Univ - 로그인/회원가입</title>
+    <link rel="stylesheet" href="/css/auth/index.css">
+</head>
+<body>
+<div class="psr-logo">PSR</div>
+
+<div class="container">
+    <h2>Public Study Room</h2>
+    <div class="tabs">
+        <div class="tab active" id="loginTab">로그인</div>
+        <div class="tab" id="signupTab">회원가입</div>
+    </div>
+
+    <!-- 로그인 폼 -->
+    <form id="loginForm" autocomplete="off">
+        <label for="loginUsername">아이디 (이메일)</label>
+        <input type="text" id="loginUsername" required placeholder="아이디를 입력하세요" />
+        <label for="loginPassword">비밀번호</label>
+        <input type="password" id="loginPassword" required placeholder="비밀번호를 입력하세요" />
+        <button type="submit">로그인</button>
+        <div class="message" id="loginMessage"></div>
+    </form>
+
+    <!-- 회원가입 폼 -->
+    <form id="signupForm" style="display:none;">
+        <label for="signupUsername">아이디 (이메일)</label>
+        <input type="text" id="signupUsername" required placeholder="아이디를 입력하세요" />
+        <div id="emailValidation" class="validation-msg hidden">이메일 ✖</div>
+
+        <label for="signupPassword">비밀번호</label>
+        <input type="password" id="signupPassword" required placeholder="비밀번호를 입력하세요" />
+        <div id="passwordCriteria" class="validation-msg hidden">
+            <span id="hasLetter" class="invalid">영어 ✖</span>
+            <span id="hasNumber" class="invalid">숫자 ✖</span>
+            <span id="hasSpecial" class="invalid">특수문자 ✖</span>
+        </div>
+
+        <label for="signupConfirmPassword">비밀번호 확인</label>
+        <input type="password" id="signupConfirmPassword" required placeholder="비밀번호를 다시 입력하세요" />
+        <div id="passwordMatch" class="validation-msg hidden">비밀번호 일치 ✖</div>
+
+        <button type="submit">회원가입</button>
+        <div class="message" id="signupMessage"></div>
+    </form>
+</div>
+
+<script src="/js/auth/index.js"></script>
+</body>
+</html>
