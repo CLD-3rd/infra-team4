@@ -30,12 +30,12 @@ public class MemberApiController {
         this.memberApiService = memberApiService;
     }
 
-    @GetMapping("/user")
+    @GetMapping("/api/member")
     public ResponseEntity<MemberResponse> findMyDetails(@AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
         return ResponseEntity.status(HttpStatus.OK).body(memberApiService.findById(customMemberDetails.getId()));
     }
 
-    @PutMapping("/user/update")
+    @PutMapping("/api/member")
     public ResponseEntity<Map<String, String>> updateMember(@AuthenticationPrincipal CustomMemberDetails customMemberDetails,
                                                             @RequestBody @Validated UpdateMemberRequest updateMemberRequest) {
         memberApiService.updateMember(customMemberDetails.getId(), updateMemberRequest);
