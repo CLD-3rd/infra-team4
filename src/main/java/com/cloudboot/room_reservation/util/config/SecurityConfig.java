@@ -47,6 +47,7 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -54,13 +55,45 @@ public class SecurityConfig {
                 .logout(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable);
-
-        http
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/api/join", "/api/login", "/reissue", "/api/logout", "/mail/**").permitAll()
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/", "/css/**", "/js/**", "/images/**", "/index.html",
+                                "/api/join", "/api/login", "/reissue", "/api/logout"
+                                , "/mail/**"
+                        ).permitAll()
+                        .requestMatchers("/api/member").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().permitAll()); // 0519 임시
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) ->
+                                response.sendRedirect("/index.html")
+                        )
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                response.sendRedirect("/index.html")
+                        )
+                );
+
+
+
+//          http
+//                          .authorizeHttpRequests(auth -> auth
+//                                  .requestMatchers(
+//                                          "/", "/index.html",
+//                                          "/css/**", "/js/**", "/images/**",
+//                                          "/api/join", "/api/login", "/reissue", "/api/logout"
+//                                  ).permitAll()
+//
+//                                  .requestMatchers("/user-dashboard.html", "/my-profile.html", "/api/**").hasRole("USER")
+//
+//                                  .requestMatchers("/admin/**", "admin-dashboard.html", "member-manage.html").hasRole("ADMIN")
+//
+//                                  .anyRequest().authenticated()
+//                          );
+
+
 
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, "/api/login"),
@@ -75,13 +108,13 @@ public class SecurityConfig {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration configuration = new CorsConfiguration();
 
-                        configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500"));
+                        configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500", "http://127.0.0.1:8080", "http://localhost:8080"));
                         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
                         configuration.setMaxAge(3600L);
 
-                        configuration.setExposedHeaders(Arrays.asList("access", "redirect-url"));
+                        configuration.setExposedHeaders(Arrays.asList("access", "redirect-url", "Authorization"));
 
                         return configuration;
                     }

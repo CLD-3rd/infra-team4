@@ -83,6 +83,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setHeader("access", access);
         response.setHeader("redirect-url", redirectUrl);
         response.addCookie(createCookie("refresh", refresh));
+        response.addCookie(createCookie("access", access));
         response.setStatus(HttpStatus.OK.value());
 
     }
@@ -90,10 +91,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private String findRedirectUrl(String role) {
         log.info("LOGIN ROLE = {}", role);
         if (role.equals("ROLE_USER")) {
-            return "func.html";
+            return "user-dashboard.html";
         }
         else {
-            return "admin/dashboard.html";
+            return "admin-dashboard.html";
         }
     }
 
@@ -110,7 +111,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         cookie.setMaxAge(24*60*60);
 //        cookie.setSecure(true);
         cookie.setPath("/");
-        cookie.setDomain("127.0.0.1");
+//        cookie.setDomain("127.0.0.1");
         cookie.setHttpOnly(true);
 
         return cookie;

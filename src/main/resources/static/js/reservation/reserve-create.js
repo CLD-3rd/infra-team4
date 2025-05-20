@@ -7,8 +7,8 @@ let selectedRoom = 'Room1';
 let selectedTime = null;
 
 const mockReservations = {
-  '2025-05-18|Room1': ['11:00', '16:00'],
-  '2025-05-18|Room2': ['10:00', '13:00']
+  '2025-05-19|Room1': ['11:00', '16:00'],
+  '2025-05-19|Room2': ['10:00', '13:00']
 };
 
 // 1. 시간 슬롯 생성 (1시간 간격, 09~22시)
@@ -118,6 +118,13 @@ reserveBtn.addEventListener('click', () => {
       })
       .then(data => {
         alert(data.message || "예약이 완료되었습니다.");
+        // 예약 완료 시 비활성화
+          const key = `${reservationDateInput.value}|${selectedRoom}`;
+          if (!mockReservations[key]) {
+            mockReservations[key] = [];
+          }
+          mockReservations[key].push(selectedTime);
+
         document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
         selectedTime = null;
         reserveBtn.style.display = 'none';
