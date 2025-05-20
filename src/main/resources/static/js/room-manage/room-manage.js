@@ -79,8 +79,10 @@ async function showReservations(roomId, roomNumber) {
     ul.innerHTML = '<li>예약 내역이 없습니다.</li>';
   } else {
     list.forEach(r => {
+      const start = r.startTime.replace('T', ' ');
+      const end   = r.endTime  .replace('T', ' ');
       const li = document.createElement('li');
-      li.textContent = `[${r.status}] ${r.startTime} ~ ${r.endTime} (Member: ${r.member.memberId})`;
+      li.textContent = `[예약상황] ${start} ~ ${end} (사용자명: ${r.member.username})`;
       ul.appendChild(li);
     });
   }
