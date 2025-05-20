@@ -1,6 +1,8 @@
 package com.cloudboot.room_reservation.reservation.repository;
 
 import com.cloudboot.room_reservation.reservation.entity.Reservation;
+
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,7 +22,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findByRoomRoomId(@Param("roomId") Long roomId);
 
     // 회원별 전체 예약 조회
-    List<Reservation> findAllByMember_MemberId(Long memberId);
+    List<Reservation> findAllByMember_MemberId(Long memberId, Sort sort);
 
     /**
      * 해당 룸에 대해 요청된 시간대와 겹치는 예약이 존재하는지 확인
@@ -57,4 +59,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
            "JOIN FETCH r.room " +
            "WHERE r.reservationId = :reservationId")
     Reservation findByReservationId(@Param("reservationId") Long reservationId);
+    
+    List<Reservation> findAllByOrderByReservationIdDesc();
 }
