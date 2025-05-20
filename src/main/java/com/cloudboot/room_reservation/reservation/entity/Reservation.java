@@ -50,4 +50,25 @@ public class Reservation {
     public void preUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
+	
+	
+	public String getUsername() {
+		return this.member.getUsername();
+	}
+	
+	public int getRoomNumber() {
+		return this.room.getRoomNumber();
+	}
+
+
+
+	public Reservation(Long reservationId, Room roomNumber, LocalDateTime startTime, LocalDateTime endTime, ReservationStatus reservationStatus, Member member) {
+		this.reservationId = reservationId;
+		this.room = room;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.status = reservationStatus;
+		this.member = member;
+	}
 }
