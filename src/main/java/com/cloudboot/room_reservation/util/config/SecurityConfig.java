@@ -57,40 +57,39 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        // 페이지
+                        .requestMatchers("/", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/html/auth/**", "/index.html", "/html/main/**", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
+
+                        // 사용자
                         .requestMatchers(
-                                "/", "/css/**", "/js/**", "/images/**", "/index.html",
-                                "/api/join", "/api/login", "/reissue", "/api/logout"
-                        ).permitAll()
-                        .requestMatchers("/api/member").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/**").hasRole("USER")
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                                "/html/dashboard/user-dashboard.html",
+                                "/html/dashboard/my-profile.html",
+                                "/html/dashboard/change-password.html"
+                        ).hasRole("USER")
+
+                        // 관리자
+                        .requestMatchers(
+                                "/html/dashboard/admin-dashboard.html",
+                                "/html/dashboard/member-manage.html"
+                        ).hasRole("ADMIN")
+
+                        // 사용자 API
+                        .requestMatchers("/api/member/**", "/api/reservations/**", "/api/notice/**").hasRole("USER")
+
+                        // 관리자 API
+                        .requestMatchers("/api/admin/**", "/admin").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) ->
-                                response.sendRedirect("/index.html")
+                                response.sendRedirect("/html/auth/index.html")
                         )
                         .accessDeniedHandler((request, response, accessDeniedException) ->
-                                response.sendRedirect("/index.html")
+                                response.sendRedirect("/html/auth/index.html")
                         )
                 );
-
-
-
-//          http
-//                          .authorizeHttpRequests(auth -> auth
-//                                  .requestMatchers(
-//                                          "/", "/index.html",
-//                                          "/css/**", "/js/**", "/images/**",
-//                                          "/api/join", "/api/login", "/reissue", "/api/logout"
-//                                  ).permitAll()
-//
-//                                  .requestMatchers("/user-dashboard.html", "/my-profile.html", "/api/**").hasRole("USER")
-//
-//                                  .requestMatchers("/admin/**", "admin-dashboard.html", "member-manage.html").hasRole("ADMIN")
-//
-//                                  .anyRequest().authenticated()
-//                          );
 
 
 

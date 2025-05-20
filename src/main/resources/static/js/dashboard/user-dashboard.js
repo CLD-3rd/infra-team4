@@ -4,7 +4,7 @@ console.log(accessToken);
 
 // 로고 클릭 이벤트
 document.querySelector('.psr-logo').addEventListener('click', () => {
-    window.location.href = 'user-dashboard.html';
+    window.location.href = '/html/dashboard/user-dashboard.html';
 });
 
 // 프로필 메뉴 관련 요소
@@ -24,7 +24,7 @@ window.addEventListener('click', () => {
 
 // 프로필 설정 버튼 클릭
 document.getElementById('profileSettingsBtn').addEventListener('click', () => {
-    window.location.href = '/my-profile.html';
+    window.location.href = '/html/dashboard/my-profile.html';
     profileMenu.classList.remove('active');
 });
 
@@ -38,7 +38,7 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
 
         if (response.ok) {
             localStorage.removeItem('access');
-            window.location.href = '/index.html';
+            window.location.href = '/html/auth/index.html';
         } else {
             alert('로그아웃에 실패했습니다.');
         }
