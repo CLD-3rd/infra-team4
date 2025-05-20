@@ -61,47 +61,48 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/", "/css/**", "/js/**", "/images/**", "/index.html",
-                                "/api/join", "/api/login", "/reissue", "/api/logout"
-                        ).permitAll()
-                        .requestMatchers("/api/member").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/**").hasRole("USER")
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/html/auth/**", "/html/main/**", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
+
+                        // 사용자
+                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/index.html",
+                                        "/api/join", "/api/login", "/reissue", "/api/logout", "/mail/**").permitAll()
+                                .requestMatchers(
+                                        "/html/dashboard/change-password.html",
+                                        "/html/dashboard/my-profile.html",
+                                        "/html/dashboard/user-dashboard",
+                                        "/html/notice/notice.html",
+                                        "/html/reservation/reserve-list.html",
+                                        "/html/reservation/reserve.html"
+                                ).hasRole("USER")
+
+                                .requestMatchers(
+                                        "/html/dashboard/admin-dashboard.html",
+                                        "/html/dashboard/member-manage",
+                                        "/html/notice/admin-notice.html",
+                                        "/html/reservation/admin-reservation"
+                                ).hasRole("ADMIN")
+                                .requestMatchers("/api/member/**", "/api/reservations/**", "/api/notice/**").hasRole("USER")
+                                .requestMatchers("/api/admin/**", "/admin").hasRole("ADMIN")
+                                .requestMatchers("/api/member").hasAnyRole("USER", "ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) ->
-                                response.sendRedirect("/index.html")
+                                response.sendRedirect("/html/auth/index.html")
                         )
                         .accessDeniedHandler((request, response, accessDeniedException) ->
-                                response.sendRedirect("/index.html")
+                                response.sendRedirect("/html/auth/test.html")
                         )
                 );
-
-
-
-//          http
-//                          .authorizeHttpRequests(auth -> auth
-//                                  .requestMatchers(
-//                                          "/", "/index.html",
-//                                          "/css/**", "/js/**", "/images/**",
-//                                          "/api/join", "/api/login", "/reissue", "/api/logout"
-//                                  ).permitAll()
-//
-//                                  .requestMatchers("/user-dashboard.html", "/my-profile.html", "/api/**").hasRole("USER")
-//
-//                                  .requestMatchers("/admin/**", "admin-dashboard.html", "member-manage.html").hasRole("ADMIN")
-//
-//                                  .anyRequest().authenticated()
-//                          );
 
 
 
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, "/api/login"),
                         UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTFilter(jwtUtil, reissueService), LoginFilter.class)
+                .addFilterBefore(new JWTFilter(jwtUtil, reissueService), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository, "/api/logout"), UsernamePasswordAuthenticationFilter.class);
 
 

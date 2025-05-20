@@ -20,7 +20,7 @@ form.addEventListener('submit', async (e) => {
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                'access': accessToken
+                'Authorization': `Bearer ${accessToken}`
             },
             body: JSON.stringify(data)
         });
@@ -29,7 +29,7 @@ form.addEventListener('submit', async (e) => {
             messageBox.textContent = '✅ 비밀번호가 성공적으로 변경되었습니다.';
             messageBox.className = 'message success';
             setTimeout(() => {
-                window.location.href = '/user-dashboard.html';
+                window.location.href = '/html/dashboard/user-dashboard.html';
             }, 2000);
         } else {
             const errMsg = await res.text();

@@ -2,7 +2,7 @@ const timeSlotsContainer = document.getElementById('time-slots');
 const reservationDateInput = document.getElementById('reservation-date');
 const roomButtons = document.querySelectorAll('.room-button');
 const reserveBtn = document.getElementById('reserve-btn');
-
+const accessToken = localStorage.getItem('access');
 let selectedRoom = 'Room1';
 let selectedTime = null;
 
@@ -77,53 +77,54 @@ roomButtons.forEach(button => {
 //4. 예약 버튼 클릭
 reserveBtn.addEventListener('click', () => {
   if (selectedTime && reservationDateInput.value && selectedRoom) {
-    const roomIdMap = {
+    const roomNumberMap = {
       Room1: 101,
       Room2: 102,
       Room3: 103
     };
-    const roomId = roomIdMap[selectedRoom];
-    const memberId = 1; // 실제 로그인 사용자 ID로 교체
+    const roomNumber = roomNumberMap[selectedRoom];
+    //const memberId = 1; // 실제 로그인 사용자 ID로 교체
 
     const startTime = `${reservationDateInput.value}T${selectedTime}`;
-    const [hour, minute] = selectedTime.split(':').map(Number);
 
-    // 종료 시간 직접 계산 (1시간 후)
     const endDate = new Date(`${reservationDateInput.value}T${selectedTime}`);
     endDate.setHours(endDate.getHours() + 1);
 
-    // 로컬 기준 YYYY-MM-DDTHH:mm 포맷
     const pad = n => n.toString().padStart(2, '0');
     const endTime = `${endDate.getFullYear()}-${pad(endDate.getMonth() + 1)}-${pad(endDate.getDate())}T${pad(endDate.getHours())}:${pad(endDate.getMinutes())}`;
 
     const reservationData = {
-      roomId,
-      memberId,
+      roomNumber,
       startTime,
       endTime
     };
 
     console.log("예약 데이터: ", JSON.stringify(reservationData));
-    fetch("/api/reservations", {
+
+    fetch("/api/member/reservations", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // "access": localStorage.getItem("accessToken") || ""
+        "Authorization": `Bearer ${accessToken}`
       },
       body: JSON.stringify(reservationData)
     })
       .then(res => {
-        if (!res.ok) throw new Error("예약 실패");
+        if (!res.ok) {
+          return res.text().then(text => {
+            throw new Error(text || "예약 실패");
+          });
+        }
         return res.json();
       })
       .then(data => {
         alert(data.message || "예약이 완료되었습니다.");
-        // 예약 완료 시 비활성화
-          const key = `${reservationDateInput.value}|${selectedRoom}`;
-          if (!mockReservations[key]) {
-            mockReservations[key] = [];
-          }
-          mockReservations[key].push(selectedTime);
+
+        const key = `${reservationDateInput.value}|${selectedRoom}`;
+        if (!mockReservations[key]) {
+          mockReservations[key] = [];
+        }
+        mockReservations[key].push(selectedTime);
 
         document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
         selectedTime = null;
@@ -131,8 +132,8 @@ reserveBtn.addEventListener('click', () => {
         renderTimeSlots(reservationDateInput.value, selectedRoom);
       })
       .catch(err => {
-        alert("예약 요청 중 오류 발생");
-        console.error(err);
+        console.error("예약 요청 중 오류 발생:", err);
+        alert("예약 요청 실패: " + err.message);
       });
   }
 });

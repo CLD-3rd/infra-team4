@@ -1,11 +1,13 @@
 package com.cloudboot.room_reservation.reservation.service;
 
+import com.cloudboot.room_reservation.alarm.service.ReservationEmailSender;
 import com.cloudboot.room_reservation.reservation.dto.response.ReservationListResponseDto;
 import com.cloudboot.room_reservation.reservation.entity.Reservation;
 import com.cloudboot.room_reservation.reservation.enumerate.ReservationStatus;
 import com.cloudboot.room_reservation.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,9 +16,14 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ReservationAdminService {
-    private final ReservationRepository reservationRepository;
+    
+	private final ReservationRepository reservationRepository;
+	
+	private final ReservationEmailSender reservationEmailSender;
+    
 
     // 1. 관리자) 예약 승인
+	@Transactional
     public void approveReservation(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 예약이 존재하지 않습니다."));
@@ -29,11 +36,13 @@ public class ReservationAdminService {
         reservation.setStatus(ReservationStatus.APPROVED);
         reservation.setUpdatedAt(LocalDateTime.now());
         reservationRepository.save(reservation);
-        // 이후 메일 전송 기능 연결
-        // emailService.sendApprovalEmail(reservation);
+        
+        // 메일 전송
+        reservationEmailSender.send(reservation);
     }
 
     // 2. 관리자) 예약 거절
+	@Transactional
     public void rejectReservation(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 예약이 존재하지 않습니다."));
@@ -47,8 +56,9 @@ public class ReservationAdminService {
         reservation.setStatus(ReservationStatus.REJECTED);
         reservation.setUpdatedAt(LocalDateTime.now());
         reservationRepository.save(reservation);
-        // 이후 메일 전송 기능 연결
-        // emailService.sendRejectionEmail(reservation);
+        
+        // 메일 전송
+        reservationEmailSender.send(reservation);
     }
 
     // 3. 관리자) 전체 예약 목록 조회

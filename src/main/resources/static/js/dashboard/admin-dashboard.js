@@ -22,7 +22,7 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
         });
 
         if (response.ok) {
-            window.location.href = '../index.html';
+            window.location.href = '/html/auth/index.html';
         } else {
             alert('로그아웃에 실패했습니다.');
         }
@@ -36,6 +36,6 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
 
 // 프로필 설정 이동
 document.getElementById('profileSettingsBtn').addEventListener('click', () => {
-    window.location.href = '../my-profile.html';
+    window.location.href = '/html/dashboard/my-profile.html';
     profileMenu.classList.remove('active');
 });

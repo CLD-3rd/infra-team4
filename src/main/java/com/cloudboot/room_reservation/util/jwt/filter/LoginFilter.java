@@ -91,10 +91,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private String findRedirectUrl(String role) {
         log.info("LOGIN ROLE = {}", role);
         if (role.equals("ROLE_USER")) {
-            return "user-dashboard.html";
+            return "/html/dashboard/user-dashboard.html";
         }
         else {
-            return "admin-dashboard.html";
+            return "/html/dashboard/admin-dashboard.html";
         }
     }
 

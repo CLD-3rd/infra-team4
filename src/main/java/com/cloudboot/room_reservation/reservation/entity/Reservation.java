@@ -37,7 +37,7 @@ public class Reservation {
     private LocalDateTime endTime;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = true, columnDefinition = "VARCHAR(20) DEFAULT 'PENDING'")
+    @Column(name = "status", columnDefinition = "VARCHAR(20) DEFAULT 'PENDING'")
     private ReservationStatus status = ReservationStatus.PENDING;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -49,5 +49,14 @@ public class Reservation {
     @PreUpdate
     public void preUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    // 편의 메서드
+    public String getUsername() {
+        return this.member.getUsername();
+    }
+
+    public String getRoomNumber() {
+        return this.room.getRoomNumber();
     }
 }

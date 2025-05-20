@@ -1,5 +1,6 @@
 package com.cloudboot.room_reservation.reservation.service;
 
+import com.cloudboot.room_reservation.alarm.service.ReservationEmailSender;
 import com.cloudboot.room_reservation.member.entity.Member;
 import com.cloudboot.room_reservation.member.repository.MemberRepository;
 import com.cloudboot.room_reservation.reservation.dto.request.ReservationRequestDto;
@@ -12,6 +13,7 @@ import com.cloudboot.room_reservation.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,12 +26,16 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final RoomRepository roomRepository;
     private final MemberRepository memberRepository;
+    
+    private final ReservationEmailSender reservationEmailSender;
+    
 
     // 1. 사용자) 예약 생성
+    @Transactional
     public void createReservation(ReservationRequestDto request) {
         Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        Room room = roomRepository.findById(request.getRoomId())
+        Room room = roomRepository.findByRoomNumber(request.getRoomNumber())
                 .orElseThrow(() -> new IllegalArgumentException("해당 룸이 존재하지 않습니다."));
         LocalDateTime now = LocalDateTime.now();
         if (request.getStartTime().isBefore(now.plusHours(2))) {
@@ -37,7 +43,7 @@ public class ReservationService {
         }
         // 중복 예약 방지 (동일 룸, 겹치는 시간)
         boolean exists = reservationRepository.existsByRoomAndTimeOverlap(
-                request.getRoomId(), request.getStartTime(), request.getEndTime());
+                request.getRoomNumber(), request.getStartTime(), request.getEndTime());
         if (exists) {
             throw new IllegalStateException("해당 시간대에는 이미 예약이 존재합니다.");
         }
@@ -53,6 +59,7 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
     // 2. 사용자) 예약 취소
+    @Transactional
     public void cancelReservation(Long reservationId){
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다."));
@@ -63,6 +70,8 @@ public class ReservationService {
         reservation.setStatus(ReservationStatus.CANCELED);
         reservation.setUpdatedAt(LocalDateTime.now());
         reservationRepository.save(reservation);
+        // 메일 전송
+        reservationEmailSender.send(reservation);
     }
     // 3. 사용자) 예약 목록 조회
     public List<ReservationListResponseDto> getUserReservations(Long memberId) {
