@@ -23,6 +23,6 @@ document.getElementById('profileSettingsBtn').addEventListener('click', () => {
 });
 
 document.getElementById('myReservationsBtn').addEventListener('click', () => {
-  window.location.href = "reserve-list.html";
+  window.location.href = "/html/reservation/reserve-list.html";
   profileMenu.classList.remove('active');
 });

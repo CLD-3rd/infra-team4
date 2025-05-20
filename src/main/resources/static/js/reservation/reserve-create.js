@@ -2,6 +2,7 @@ const timeSlotsContainer = document.getElementById('time-slots');
 const reservationDateInput = document.getElementById('reservation-date');
 const roomButtons = document.querySelectorAll('.room-button');
 const reserveBtn = document.getElementById('reserve-btn');
+const accessToken = localStorage.getItem("access");
 
 let selectedRoom = 'Room1';
 let selectedTime = null;
@@ -108,7 +109,7 @@ reserveBtn.addEventListener('click', () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // "access": localStorage.getItem("accessToken") || ""
+        "Authorization": `Bearer ${accessToken}`
       },
       body: JSON.stringify(reservationData)
     })

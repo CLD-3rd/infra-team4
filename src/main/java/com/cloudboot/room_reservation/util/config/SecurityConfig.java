@@ -1,7 +1,6 @@
 package com.cloudboot.room_reservation.util.config;
 import com.cloudboot.room_reservation.member.repository.RefreshRepository;
 import com.cloudboot.room_reservation.util.jwt.filter.CustomLogoutFilter;
-import com.cloudboot.room_reservation.util.jwt.filter.JWTFilter;
 import com.cloudboot.room_reservation.util.jwt.filter.LoginFilter;
 import com.cloudboot.room_reservation.util.jwt.util.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;

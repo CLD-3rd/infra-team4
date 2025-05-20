@@ -1,4 +1,5 @@
 const reservationListContainer = document.getElementById("reservation-list");
+const accessToken = localStorage.getItem("access");
 // const memberId = 1; // TODO: 실제 로그인된 사용자 ID로 교체
 
 // 날짜 변환
@@ -24,9 +25,13 @@ function translateStatus(status) {
   }
 }
 
-// 사용자 예약 목록 불러오기
 function fetchReservations() {
-  fetch("/api/reservations/member")
+  fetch("/api/reservations/member", {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${accessToken}`
+    }
+  })
     .then(res => {
       if (!res.ok) throw new Error("예약 정보를 불러오는 데 실패했습니다.");
       return res.json();
@@ -35,7 +40,7 @@ function fetchReservations() {
       reservationListContainer.innerHTML = ""; // 초기화
 
       if (data.length === 0) {
-        reservationListContainer.innerHTML = "<p> 예약 내역이 없습니다.</p>";
+        reservationListContainer.innerHTML = "<p>예약 내역이 없습니다.</p>";
         return;
       }
 
@@ -72,49 +77,49 @@ function fetchReservations() {
 function cancelReservation(reservationId) {
   if (!confirm("이 예약을 취소하시겠습니까?")) return;
 
- fetch(`/api/reservations/${reservationId}/cancel`, {
-   method: "DELETE"
- })
-   .then(res => {
-     if (!res.ok) throw new Error("예약 취소 실패");
+  fetch(`/api/reservations/${reservationId}/cancel`, {
+    method: "DELETE",
+    headers: {
+      "Authorization": `Bearer ${accessToken}`
+    }
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("예약 취소 실패");
 
-     alert("예약이 취소되었습니다.");
+      alert("예약이 취소되었습니다.");
 
-     // 예약 카드에서 정보 추출
-     const card = document.querySelector(`.cancel-btn[onclick*="${reservationId}"]`).closest(".reservation-card");
-     const roomIdText = card.querySelector(".row:nth-child(2)").textContent.split(":")[1].trim();
-     const startTimeText = card.querySelector(".row:nth-child(3)").textContent;
+      const card = document.querySelector(`.cancel-btn[onclick*="${reservationId}"]`).closest(".reservation-card");
+      const roomIdText = card.querySelector(".row:nth-child(2)").textContent.split(":")[1].trim();
+      const startTimeText = card.querySelector(".row:nth-child(3)").textContent;
 
-     const roomMap = {
-       "101": "Room1",
-       "102": "Room2",
-       "103": "Room3"
-     };
-     const roomName = roomMap[roomIdText];
+      const roomMap = {
+        "101": "Room1",
+        "102": "Room2",
+        "103": "Room3"
+      };
+      const roomName = roomMap[roomIdText];
 
-     const match = startTimeText.match(/(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일\s*(\d{1,2})시/);
-     if (match) {
-       const [_, year, month, day, hour] = match;
-       const date = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-       const time = `${hour.padStart(2, '0')}:00`;
-       const key = `${date}|${roomName}`;
+      const match = startTimeText.match(/(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일\s*(\d{1,2})시/);
+      if (match) {
+        const [_, year, month, day, hour] = match;
+        const date = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        const time = `${hour.padStart(2, '0')}:00`;
+        const key = `${date}|${roomName}`;
 
-       if (mockReservations[key]) {
-         mockReservations[key] = mockReservations[key].filter(t => t !== time);
-       }
+        if (mockReservations[key]) {
+          mockReservations[key] = mockReservations[key].filter(t => t !== time);
+        }
 
-       // UI 갱신
-       if (typeof renderTimeSlots === "function") {
-         renderTimeSlots(reservationDateInput.value, selectedRoom);
-       }
-     }
+        if (typeof renderTimeSlots === "function") {
+          renderTimeSlots(reservationDateInput.value, selectedRoom);
+        }
+      }
 
-     fetchReservations(); // 목록 갱신
-   })
-   .catch(err => {
-     console.error("예약 취소 중 오류 발생", err);
-   });
-
+      fetchReservations(); // 목록 갱신
+    })
+    .catch(err => {
+      console.error("예약 취소 중 오류 발생", err);
+    });
 }
 
 // 초기 실행
