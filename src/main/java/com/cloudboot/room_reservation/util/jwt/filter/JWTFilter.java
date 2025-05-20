@@ -3,6 +3,7 @@ package com.cloudboot.room_reservation.util.jwt.filter;
 import com.cloudboot.room_reservation.member.dto.CustomMemberDetails;
 import com.cloudboot.room_reservation.member.dto.MemberDTO;
 import com.cloudboot.room_reservation.member.enumerate.Role;
+import com.cloudboot.room_reservation.member.service.ReissueService;
 import com.cloudboot.room_reservation.util.jwt.util.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -21,9 +22,11 @@ import java.io.IOException;
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
+    private final ReissueService reissueService;
 
-    public JWTFilter(JWTUtil jwtUtil) {
+    public JWTFilter(JWTUtil jwtUtil, ReissueService reissueService) {
         this.jwtUtil = jwtUtil;
+        this.reissueService = reissueService;
     }
 
     @Override
@@ -31,14 +34,14 @@ public class JWTFilter extends OncePerRequestFilter {
 
 
         String accessToken = request.getHeader("access");
-        log.info("accessToken = {}", accessToken);
+//        log.info("accessToken = {}", accessToken);
 
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("access")) {
                     accessToken = cookie.getValue();
-                    log.info("accessToken By Cookie = {}", accessToken);
+//                    log.info("accessToken By Cookie = {}", accessToken);
                 }
             }
         }
@@ -48,11 +51,28 @@ public class JWTFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return ;
         }
+
+
         // access Token은 있는데 만료 되었으면 다음 필터 이동 없이, 바로 종료
         try {
             jwtUtil.isExpired(accessToken);
         } catch (ExpiredJwtException e) {
-            throw new RuntimeException(e);
+            // access 만료 → refresh로 재발급 시도
+            boolean reissued = reissueService.reissue(request, response);
+
+            if (!reissued) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Token expired. Please login again.");
+                return;
+            }
+
+            // 새 accessToken 재지정
+            accessToken = response.getHeader("access");
+
+            if (accessToken == null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
         }
 
         // JWTUtil을 통해서 access Token값 읽기

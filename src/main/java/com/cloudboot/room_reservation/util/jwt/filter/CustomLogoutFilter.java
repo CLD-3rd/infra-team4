@@ -110,8 +110,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
             return;
         }
 
-        log.info("해당 refresh 토큰은 DB에 존재합니다. 따라서 Access Token과 Refresh Token 재발급을 진행하겠습니다.");
-
         //로그아웃 진행
         //Refresh 토큰 DB에서 제거
         refreshRepository.deleteByRefresh(refresh);
