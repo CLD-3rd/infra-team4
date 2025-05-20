@@ -10,7 +10,14 @@ import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     // 룸별 예약 조회
-    List<Reservation> findByRoomRoomId(Long roomId);
+	@Query("""
+			SELECT DISTINCT r
+			FROM Reservation r
+			JOIN FETCH r.member m
+			JOIN FETCH r.room rm 
+			WHERE rm.roomId = :roomId
+			""")
+    List<Reservation> findByRoomRoomId(@Param("roomId") Long roomId);
 
     // 회원별 전체 예약 조회
     List<Reservation> findAllByMember_MemberId(Long memberId);

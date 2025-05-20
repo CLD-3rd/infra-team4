@@ -2,6 +2,8 @@ package com.cloudboot.room_reservation.member.entity;
 import com.cloudboot.room_reservation.member.enumerate.Role;
 import com.cloudboot.room_reservation.reservation.entity.Reservation;
 import com.cloudboot.room_reservation.util.global.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +29,7 @@ public class Member extends BaseEntity{
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations;
 

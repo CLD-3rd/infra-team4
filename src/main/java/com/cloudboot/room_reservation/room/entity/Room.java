@@ -1,6 +1,8 @@
 package com.cloudboot.room_reservation.room.entity;
 
 import com.cloudboot.room_reservation.reservation.entity.Reservation;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +25,7 @@ public class Room {
     @Column(name = "room_number", unique = true, nullable = false)
     private String roomNumber;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations;
 

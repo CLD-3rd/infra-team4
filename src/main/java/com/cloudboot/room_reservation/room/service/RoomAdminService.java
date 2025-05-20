@@ -11,7 +11,8 @@ import java.util.List;
 public class RoomAdminService {
     private final RoomRepository repo;
     public RoomAdminService(RoomRepository repo) { this.repo = repo; }
-    public List<Room> getAll() { return repo.findAll(); }
+    public List<Room> getAll() { return repo.findAllByFetchJoin(); }
+    
     public Room create(Room room) { return repo.save(room); }
     public Room update(Long id, String number) {
         Room r = repo.findById(id).orElseThrow();
