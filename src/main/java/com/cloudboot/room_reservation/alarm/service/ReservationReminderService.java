@@ -17,7 +17,7 @@ public class ReservationReminderService {
 
 
     private final ReservationRepository reservationRepository;
-    private final ReservationEmailSender emailService;
+    private final ReservationEmailAsyncSender emailAsyncSender;
 
     /**
      * 매시 50분마다 10분 전 예약을 조회하고 비동기로 이메일 알림 전송
@@ -28,7 +28,7 @@ public class ReservationReminderService {
         List<Reservation> reservations = reservationRepository.findByStartTimeBetween(
                 now.plusMinutes(9), now.plusMinutes(11));
 
-        reservations.forEach(emailService::sendReminderAsync); // 비동기 호출
+        reservations.forEach(emailAsyncSender::sendReminder); // 비동기 호출
     }
 	
 }
