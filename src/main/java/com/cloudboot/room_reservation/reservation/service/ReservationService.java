@@ -35,7 +35,7 @@ public class ReservationService {
     public void createReservation(ReservationRequestDto request) {
         Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        Room room = roomRepository.findById(request.getRoomId())
+        Room room = roomRepository.findByRoomNumber(request.getRoomNumber())
                 .orElseThrow(() -> new IllegalArgumentException("해당 룸이 존재하지 않습니다."));
         LocalDateTime now = LocalDateTime.now();
         if (request.getStartTime().isBefore(now.plusHours(2))) {
@@ -43,7 +43,7 @@ public class ReservationService {
         }
         // 중복 예약 방지 (동일 룸, 겹치는 시간)
         boolean exists = reservationRepository.existsByRoomAndTimeOverlap(
-                request.getRoomId(), request.getStartTime(), request.getEndTime());
+                request.getRoomNumber(), request.getStartTime(), request.getEndTime());
         if (exists) {
             throw new IllegalStateException("해당 시간대에는 이미 예약이 존재합니다.");
         }
@@ -70,7 +70,6 @@ public class ReservationService {
         reservation.setStatus(ReservationStatus.CANCELED);
         reservation.setUpdatedAt(LocalDateTime.now());
         reservationRepository.save(reservation);
-        
         // 메일 전송
         reservationEmailSender.send(reservation);
     }

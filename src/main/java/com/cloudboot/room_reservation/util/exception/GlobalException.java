@@ -48,7 +48,7 @@ public class GlobalException {
                 .body(errorResults);
     }
     
-    @ExceptionHandler(value = (ApiException.class))
+    @ExceptionHandler(ApiException.class)
     public ResponseEntity<ErrorResult> handleApiException(ApiException e) {
 		return ResponseEntity
 				.status(e.getHttpStatus())

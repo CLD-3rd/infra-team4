@@ -146,7 +146,7 @@ signupForm.addEventListener("submit", async (e) => {
             signupMessage.textContent = "회원가입 성공!";
             signupMessage.className = "message success";
             setTimeout(() => {
-                window.location.href = "/index.html";
+                window.location.href = "/html/auth/index.html";
             }, 500);
         } else {
             const error = await response.json();
@@ -203,7 +203,7 @@ loginForm.addEventListener("submit", async (e) => {
                 console.log("Token 저장 완료:", accessToken);
             }
 
-            window.location.href = redirectUrl || "/user-dashboard.html";
+            window.location.href = redirectUrl || "/html/dashboard/user-dashboard.html";
         } else {
             const errorData = await response.json();
             loginMessage.textContent = errorData.errorMessage || "로그인 실패: 알 수 없는 오류";

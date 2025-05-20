@@ -5,7 +5,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         const res = await fetch('/api/member', {
             method: 'GET',
             headers: {
-                'access': accessToken
+                'Authorization': `Bearer ${accessToken}`
             },
             credentials: 'include',
         });

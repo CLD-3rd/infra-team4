@@ -135,7 +135,7 @@ public class ReservationEmailSender {
 	private Reservation createReservation(String to, ReservationStatus status) {
 		return new Reservation(
 				1L,
-				new Room(1L, 202), 
+				new Room(1L, 202L),
 				LocalDateTime.now(), 
 				LocalDateTime.now().plusHours(2), 
 				status,
