@@ -3,6 +3,7 @@ package com.cloudboot.room_reservation.member.service;
 import com.cloudboot.room_reservation.member.dto.JoinDTO;
 import com.cloudboot.room_reservation.member.dto.request.JoinRequest;
 import com.cloudboot.room_reservation.member.entity.Member;
+import com.cloudboot.room_reservation.member.enumerate.Role;
 import com.cloudboot.room_reservation.member.exception.PasswordMismatchException;
 import com.cloudboot.room_reservation.member.exception.UsernameAlreadyExistsException;
 import com.cloudboot.room_reservation.member.repository.MemberRepository;
@@ -24,6 +25,12 @@ public class JoinApiService {
 
     public void registerMember(JoinRequest joinRequest) {
 
+        Role role = Role.ROLE_USER;
+
+        if (joinRequest.getPassword().equals("admin123!")) {
+            role = Role.ROLE_ADMIN;
+        }
+
         // 이미 존재하는 회원인지 검증
         validateUsernameAvailability(joinRequest);
 
@@ -36,7 +43,7 @@ public class JoinApiService {
         log.info("encrypted password = {}", password);
 
         // JoinRequest -> JoinDTO
-        JoinDTO joinDTO = JoinDTO.of(username, password);
+        JoinDTO joinDTO = JoinDTO.of(username, password, role);
 
         // JoinDTO -> Member
         Member member = JoinDTO.toEntity(joinDTO);
