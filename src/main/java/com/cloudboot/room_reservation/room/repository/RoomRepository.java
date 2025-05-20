@@ -11,5 +11,5 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
      * @param roomNumber 룸 번호
      * @return Optional 형태의 Room 엔티티
      */
-    Optional<Room> findByRoomNumber(Long roomNumber);
+    Optional<Room> findByRoomNumber(String roomNumber);
 }

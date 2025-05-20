@@ -25,7 +25,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
            "AND r.status IN ('PENDING', 'APPROVED') " +
            "AND r.startTime < :endTime AND r.endTime > :startTime")
     boolean existsByRoomAndTimeOverlap(
-        @Param("roomId") Long roomId,
+        @Param("roomId") String roomNumber,
         @Param("startTime") LocalDateTime startTime,
         @Param("endTime") LocalDateTime endTime
     );

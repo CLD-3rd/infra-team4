@@ -56,16 +56,17 @@ public class Reservation {
         return this.member.getUsername();
     }
 
-    public Long getRoomNumber() {
+    public String getRoomNumber() {
         return this.room.getRoomNumber();
     }
-    public Reservation(Long reservationId, Room room, LocalDateTime startTime, LocalDateTime endTime, ReservationStatus status, Member member) {
-        this.reservationId = reservationId;
-        this.room = room;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.status = status;
-        this.member = member;
-    }
-
+	public Reservation(long reservationId, Room room, LocalDateTime startTime, LocalDateTime endTime, ReservationStatus status,
+			Member member) {
+		this.reservationId = reservationId;
+		this.room = room;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.status = status;
+		this.member = member;
+		
+	}
 }
