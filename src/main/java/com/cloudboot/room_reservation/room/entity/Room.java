@@ -1,17 +1,33 @@
 package com.cloudboot.room_reservation.room.entity;
 
+import com.cloudboot.room_reservation.reservation.entity.Reservation;
 import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "room")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Room {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "room_id")
     private Long roomId;
-    @Column(unique = true, nullable = false)
+    
+    @Column(name = "room_number", unique = true, nullable = false)
     private String roomNumber;
 
-    public Long getRoomId() { return roomId; }
-    public void setRoomId(Long roomId) { this.roomId = roomId; }
-    public String getRoomNumber() { return roomNumber; }
-    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reservation> reservations;
+
+    public Room(Long id, String roomNumber) {
+        this.roomId = id;
+        this.roomNumber = roomNumber;
+    }
 }
