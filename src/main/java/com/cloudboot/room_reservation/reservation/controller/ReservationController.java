@@ -29,8 +29,10 @@ public class ReservationController {
 
     //생성
     @PostMapping
-    public ResponseEntity<Map<String, String>> createReservation(@RequestBody ReservationRequestDto request) {
-        this.reservationService.createReservation(request);
+    public ResponseEntity<Map<String, String>> createReservation(@RequestBody ReservationRequestDto request,
+                                                                 @AuthenticationPrincipal CustomMemberDetails memberDetails) {
+        request.setMemberId(memberDetails.getId());
+        reservationService.createReservation(request);
         Map<String, String> body = Map.of("message", "예약이 생성되었습니다.");
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
@@ -42,12 +44,14 @@ public class ReservationController {
         return ResponseEntity.status(HttpStatus.OK).body(body);
     }
     // 모든 예약
-    @GetMapping("/member")
+    @GetMapping
     public ResponseEntity<List<ReservationListResponseDto>> getMyReservations(
             @AuthenticationPrincipal CustomMemberDetails memberDetails) {
+        log.info("현재 로그인된 사용자 ID: {}", memberDetails.getId());
         Long memberId = memberDetails.getId();
         return ResponseEntity.ok(reservationService.getUserReservations(memberId));
     }
+
     // 예약 상세 정보
     @GetMapping({"/detail/{reservationId}"})
     public ResponseEntity<ReservationListResponseDto> getReservationDetail(@PathVariable Long reservationId) {

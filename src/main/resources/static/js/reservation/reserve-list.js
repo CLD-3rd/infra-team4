@@ -26,7 +26,7 @@ function translateStatus(status) {
 }
 
 function fetchReservations() {
-  fetch("/api/reservations/member", {
+  fetch("/api/member/reservations", {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${accessToken}`
@@ -77,7 +77,7 @@ function fetchReservations() {
 function cancelReservation(reservationId) {
   if (!confirm("이 예약을 취소하시겠습니까?")) return;
 
-  fetch(`/api/reservations/${reservationId}/cancel`, {
+  fetch(`/api/member/reservations/${reservationId}/cancel`, {
     method: "DELETE",
     headers: {
       "Authorization": `Bearer ${accessToken}`

@@ -1,6 +1,7 @@
 package com.cloudboot.room_reservation.util.config;
 import com.cloudboot.room_reservation.member.repository.RefreshRepository;
 import com.cloudboot.room_reservation.util.jwt.filter.CustomLogoutFilter;
+import com.cloudboot.room_reservation.util.jwt.filter.JWTFilter;
 import com.cloudboot.room_reservation.util.jwt.filter.LoginFilter;
 import com.cloudboot.room_reservation.util.jwt.util.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -64,6 +65,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/html/dashboard/change-password.html",
                                 "/html/dashboard/my-profile.html",
+                                "/html/dashboard/user-dashboard",
                                 "/html/notice/notice.html",
                                 "/html/reservation/reserve-list.html",
                                 "/html/reservation/reserve.html"
@@ -73,7 +75,6 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/html/dashboard/admin-dashboard.html",
                                 "/html/dashboard/member-manage",
-                                "/html/dashboard/user-dashboard",
                                 "/html/notice/admin-notice.html",
                                 "/html/reservation/admin-reservation"
                         ).hasRole("ADMIN")
@@ -88,10 +89,10 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) ->
-                                response.sendRedirect("/html/notice/notice.html")
+                                response.sendRedirect("/html/auth/index.html")
                         )
                         .accessDeniedHandler((request, response, accessDeniedException) ->
-                                response.sendRedirect("/html/reservation/reserve.html")
+                                response.sendRedirect("/html/auth/test.html")
                         )
                 );
 
@@ -100,7 +101,7 @@ public class SecurityConfig {
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, "/api/login"),
                         UsernamePasswordAuthenticationFilter.class)
-                //.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class) 0519 임시
+                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository, "/api/logout"), UsernamePasswordAuthenticationFilter.class);
 
 

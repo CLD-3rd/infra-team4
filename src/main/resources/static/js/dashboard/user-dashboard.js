@@ -28,6 +28,17 @@ document.getElementById('profileSettingsBtn').addEventListener('click', () => {
     profileMenu.classList.remove('active');
 });
 
+// 공지사항 보기
+document.getElementById("btnNotice").addEventListener("click", () => {
+  window.location.href = "/html/notice/notice.html";
+});
+
+// 스터디룸 예약하기
+document.getElementById("btnReserve").addEventListener("click", () => {
+  window.location.href = "/html/reservation/reserve.html";
+});
+
+
 // 로그아웃 처리
 document.getElementById('logoutBtn').addEventListener('click', async () => {
     try {
