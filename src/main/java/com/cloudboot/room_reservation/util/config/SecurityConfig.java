@@ -1,5 +1,6 @@
 package com.cloudboot.room_reservation.util.config;
 import com.cloudboot.room_reservation.member.repository.RefreshRepository;
+import com.cloudboot.room_reservation.member.service.ReissueService;
 import com.cloudboot.room_reservation.util.jwt.filter.CustomLogoutFilter;
 import com.cloudboot.room_reservation.util.jwt.filter.JWTFilter;
 import com.cloudboot.room_reservation.util.jwt.filter.LoginFilter;
@@ -30,11 +31,14 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
+    private final ReissueService reissueService;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil,
+                          ReissueService reissueService, RefreshRepository refreshRepository) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
+        this.reissueService = reissueService;
     }
 
     @Bean
@@ -57,33 +61,30 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // 페이지
                         .requestMatchers("/", "/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/html/auth/**", "/html/main/**", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
 
                         // 사용자
-                        .requestMatchers(
-                                "/html/dashboard/change-password.html",
-                                "/html/dashboard/my-profile.html",
-                                "/html/dashboard/user-dashboard",
-                                "/html/notice/notice.html",
-                                "/html/reservation/reserve-list.html",
-                                "/html/reservation/reserve.html"
-                        ).hasRole("USER")
+                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/index.html",
+                                        "/api/join", "/api/login", "/reissue", "/api/logout", "/mail/**").permitAll()
+                                .requestMatchers(
+                                        "/html/dashboard/change-password.html",
+                                        "/html/dashboard/my-profile.html",
+                                        "/html/dashboard/user-dashboard",
+                                        "/html/notice/notice.html",
+                                        "/html/reservation/reserve-list.html",
+                                        "/html/reservation/reserve.html"
+                                ).hasRole("USER")
 
-                        // 관리자
-                        .requestMatchers(
-                                "/html/dashboard/admin-dashboard.html",
-                                "/html/dashboard/member-manage",
-                                "/html/notice/admin-notice.html",
-                                "/html/reservation/admin-reservation"
-                        ).hasRole("ADMIN")
-
-                        // 사용자 API
-                        .requestMatchers("/api/member/**", "/api/reservations/**", "/api/notice/**").hasRole("USER")
-
-                        // 관리자 API
-                        .requestMatchers("/api/admin/**", "/admin").hasRole("ADMIN")
+                                .requestMatchers(
+                                        "/html/dashboard/admin-dashboard.html",
+                                        "/html/dashboard/member-manage",
+                                        "/html/notice/admin-notice.html",
+                                        "/html/reservation/admin-reservation"
+                                ).hasRole("ADMIN")
+                                .requestMatchers("/api/member/**", "/api/reservations/**", "/api/notice/**").hasRole("USER")
+                                .requestMatchers("/api/admin/**", "/admin").hasRole("ADMIN")
+                                .requestMatchers("/api/member").hasAnyRole("USER", "ADMIN")
 
                         .anyRequest().authenticated()
                 )
@@ -101,7 +102,7 @@ public class SecurityConfig {
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, "/api/login"),
                         UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTFilter(jwtUtil, reissueService), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository, "/api/logout"), UsernamePasswordAuthenticationFilter.class);
 
 

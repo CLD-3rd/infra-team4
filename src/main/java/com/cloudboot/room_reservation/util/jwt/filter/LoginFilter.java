@@ -100,6 +100,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private void addRefreshEntity(String username, String refresh, Long expiredMs) {
 
+        refreshRepository.deleteByUsername(username);
+
         Date date = new Date(System.currentTimeMillis() + expiredMs);
         RefreshToken refreshEntity = RefreshToken.of(username, refresh, date.toString());
 
@@ -108,7 +110,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private Cookie createCookie(String key, String value) {
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
+//        cookie.setMaxAge(24*60*60);
 //        cookie.setSecure(true);
         cookie.setPath("/");
 //        cookie.setDomain("127.0.0.1");

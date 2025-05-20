@@ -20,7 +20,15 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_id")
     private Long roomId;
+    
+    @Column(name = "room_number")
+    private int roomNumber;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations;
+    
+    public Room(Long roomId, int roomNumber) {
+    	this.roomId = roomId;
+    	this.roomNumber = roomNumber;
+    }
 }
