@@ -1,4 +1,5 @@
 const adminListContainer = document.getElementById("admin-reservation-list");
+const accessToken = localStorage.getItem("access");
 
 function formatDateTime(dateStr) {
   const date = new Date(dateStr);
@@ -17,7 +18,11 @@ function translateStatus(status) {
 }
 
 function fetchAllReservations() {
-  fetch("/api/admin/reservations")
+  fetch("/api/admin/reservations", {
+    headers: {
+      "Authorization": `Bearer ${accessToken}`
+    }
+  })
     .then(res => res.json())
     .then(data => {
       adminListContainer.innerHTML = "";
@@ -58,7 +63,12 @@ function fetchAllReservations() {
 }
 
 function approve(reservationId) {
-  fetch(`/api/admin/reservations/${reservationId}/approve`, { method: "POST" })
+  fetch(`/api/admin/reservations/${reservationId}/approve`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${accessToken}`
+    }
+  })
     .then(() => {
       alert("예약이 승인되었습니다.");
       fetchAllReservations();
@@ -66,12 +76,16 @@ function approve(reservationId) {
 }
 
 function reject(reservationId) {
-  fetch(`/api/admin/reservations/${reservationId}/reject`, { method: "POST" })
+  fetch(`/api/admin/reservations/${reservationId}/reject`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${accessToken}`
+    }
+  })
     .then(() => {
       alert("예약이 거절되었습니다.");
       fetchAllReservations();
     });
 }
 
-// 초기 실행
 fetchAllReservations();
