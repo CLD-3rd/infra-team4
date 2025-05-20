@@ -68,27 +68,27 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/html/**", "/css/**", "/js/**", "/images/**").permitAll()
+                		.requestMatchers("/").permitAll()
                         .requestMatchers("/auth/**", "/main/**", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
-                        .requestMatchers(  "/room-manage/**", "/css/room-manage/**", "/js/room-manage/**").permitAll()
+                        .requestMatchers(  "/html/room-manage/**", "/css/room-manage/**", "/js/room-manage/**").permitAll()
 
                         // 사용자
-                        .requestMatchers("/index.html",
+                        .requestMatchers("/", "/index.html",
                                         "/api/join", "/api/login", "/reissue", "/api/logout", "/mail/**").permitAll()
                                 .requestMatchers(
-                                        "/dashboard/change-password.html",
-                                        "/dashboard/my-profile.html",
-                                        "/dashboard/user-dashboard",
-                                        "/notice/notice.html",
-                                        "/reservation/reserve-list.html",
-                                        "/reservation/reserve.html"
+                                        "/html/dashboard/change-password.html",
+                                        "/html/dashboard/my-profile.html",
+                                        "/html/dashboard/user-dashboard",
+                                        "/html/notice/notice.html",
+                                        "/html/reservation/reserve-list.html",
+                                        "/html/reservation/reserve.html"
                                 ).hasRole("USER")
 
                                 .requestMatchers(
-                                        "/dashboard/admin-dashboard.html",
-                                        "/dashboard/member-manage.html",
-                                        "/notice/admin-notice.html",
-                                        "/reservation/admin-reservation.html"
+                                        "/html/dashboard/admin-dashboard.html",
+                                        "/html/dashboard/member-manage.html",
+                                        "/html/notice/admin-notice.html",
+                                        "/html/reservation/admin-reservation.html"
                                 ).hasRole("ADMIN")
                                 .requestMatchers("/api/member/**", "/api/reservations/**", "/api/notice/**").hasRole("USER")
                                 .requestMatchers("/api/admin/**", "/admin").hasRole("ADMIN")
