@@ -10,7 +10,7 @@ import lombok.*;
 public class ReservationListResponseDto {
     private Long reservationId;
     private Long memberId;
-    private Long roomId;
+    private Long roomNumber;
     private String startTime;     // "2025-05-15 09:00"
     private String endTime;       // "2025-05-15 12:00"
     private String status;        // "APPROVED"
@@ -21,7 +21,7 @@ public class ReservationListResponseDto {
         return ReservationListResponseDto.builder()
                 .reservationId(reservation.getReservationId())
                 .memberId(reservation.getMember().getMemberId())
-                .roomId(reservation.getRoom().getRoomId())
+                .roomNumber(reservation.getRoom().getRoomId())
                 .startTime(reservation.getStartTime().toString().substring(0,16))  // yyyy-MM-dd HH:mm
                 .endTime(reservation.getEndTime().toString().substring(0,16))
                 .status(reservation.getStatus().name())
