@@ -2,8 +2,8 @@ const listContainer = document.getElementById("admin-notice-list");
 const titleInput = document.getElementById("title");
 const contentInput = document.getElementById("content");
 const submitBtn = document.getElementById("submit-btn");
+const accessToken = localStorage.getItem("access");
 
-const adminId = 1; // 로그인한 관리자 ID
 let editingNoticeId = null; // 수정 중인 공지 ID
 
 submitBtn.addEventListener("click", () => {
@@ -11,36 +11,60 @@ submitBtn.addEventListener("click", () => {
   const content = contentInput.value.trim();
   if (!title || !content) return alert("제목과 내용을 모두 입력하세요.");
 
-  // 수정 중이면 PUT, 아니면 POST
+  const headers = {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${accessToken}`
+  };
+
+  // 수정이면 PUT
   if (editingNoticeId !== null) {
     fetch(`/api/admin/notices/${editingNoticeId}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify({ title, content })
     })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error("수정 실패");
+        return res.json();
+      })
       .then(() => {
         alert("수정 완료");
         resetForm();
         loadNotices();
+      })
+      .catch(err => {
+        console.error(err);
+        alert("수정 중 오류 발생");
       });
   } else {
-    fetch(`/api/admin/notices?adminId=${adminId}`, {
+    // 등록이면 POST
+    fetch("/api/admin/notices", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify({ title, content })
     })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error("등록 실패");
+        return res.json();
+      })
       .then(() => {
         alert("등록 완료");
         resetForm();
         loadNotices();
+      })
+      .catch(err => {
+        console.error(err);
+        alert("등록 중 오류 발생");
       });
   }
 });
 
 function loadNotices() {
-  fetch("/api/notices")
+  fetch("/api/notices", {
+    headers: {
+      "Authorization": `Bearer ${accessToken}`
+    }
+  })
     .then(res => res.json())
     .then(data => {
       listContainer.innerHTML = "";
@@ -63,11 +87,23 @@ function loadNotices() {
 
 function deleteNotice(id) {
   if (!confirm("삭제하시겠습니까?")) return;
-  fetch(`/api/admin/notices/${id}`, { method: "DELETE" })
-    .then(res => res.json())
+  fetch(`/api/admin/notices/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Authorization": `Bearer ${accessToken}`
+    }
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("삭제 실패");
+      return res.json();
+    })
     .then(() => {
       alert("삭제 완료");
       loadNotices();
+    })
+    .catch(err => {
+      console.error(err);
+      alert("삭제 중 오류 발생");
     });
 }
 
@@ -85,5 +121,5 @@ function resetForm() {
   submitBtn.textContent = "공지 등록";
 }
 
+// 초기 로딩
 loadNotices();
-
