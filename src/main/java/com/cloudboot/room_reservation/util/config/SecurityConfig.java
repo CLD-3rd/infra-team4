@@ -78,9 +78,9 @@ public class SecurityConfig {
 
                                 .requestMatchers(
                                         "/html/dashboard/admin-dashboard.html",
-                                        "/html/dashboard/member-manage",
+                                        "/html/dashboard/member-manage.html",
                                         "/html/notice/admin-notice.html",
-                                        "/html/reservation/admin-reservation"
+                                        "/html/reservation/admin-reservation.html"
                                 ).hasRole("ADMIN")
                                 .requestMatchers("/api/member/**", "/api/reservations/**", "/api/notice/**").hasRole("USER")
                                 .requestMatchers("/api/admin/**", "/admin").hasRole("ADMIN")
