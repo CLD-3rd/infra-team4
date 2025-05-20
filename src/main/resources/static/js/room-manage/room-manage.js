@@ -1,9 +1,8 @@
 const baseUrl = window.location.origin;
-const authHeader = 'Basic ' + btoa('admin:admin');
+const authHeader = 'Basic ' + btoa('admin@naver.com:admin');
 
-// 방 목록 불러와 그리드 렌더링
 async function loadRooms() {
-  const res = await fetch(`${baseUrl}/api/admin/rooms`, {
+  const res = await fetch(`${baseUrl}/admin/rooms`, {
     headers: { Authorization: authHeader }
   });
   const rooms = await res.json();
@@ -27,11 +26,10 @@ async function loadRooms() {
   });
 }
 
-// 룸 생성
 async function createRoom() {
-  const num = document.getElementById('new-room-number').value.trim();
+  const num = document.getElementById('roomNumberInput').value.trim();
   if (!num) return alert('룸 번호를 입력하세요.');
-  await fetch(`${baseUrl}/api/admin/rooms`, {
+  await fetch(`${baseUrl}/admin/rooms`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -39,13 +37,17 @@ async function createRoom() {
     },
     body: JSON.stringify({ roomNumber: num })
   });
-  document.getElementById('new-room-number').value = '';
+  document.getElementById('roomNumberInput').value = '';
   loadRooms();
 }
 
-// 룸 수정
+function showUpdatePrompt(id, oldNum) {
+  const newNum = prompt('새 룸 번호를 입력하세요', oldNum);
+  if (newNum) updateRoom(id, newNum);
+}
+
 async function updateRoom(id, newNum) {
-  await fetch(`${baseUrl}/api/admin/rooms/${id}`, {
+  await fetch(`${baseUrl}/admin/rooms/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -56,25 +58,17 @@ async function updateRoom(id, newNum) {
   loadRooms();
 }
 
-// 수정 프롬프트
-function showUpdatePrompt(id, oldNum) {
-  const newNum = prompt('새 룸 번호를 입력하세요', oldNum);
-  if (newNum) updateRoom(id, newNum);
-}
-
-// 룸 삭제
 async function deleteRoom(id) {
   if (!confirm('정말 삭제하시겠습니까?')) return;
-  await fetch(`${baseUrl}/api/admin/rooms/${id}`, {
+  await fetch(`${baseUrl}/admin/rooms/${id}`, {
     method: 'DELETE',
     headers: { Authorization: authHeader }
   });
   loadRooms();
 }
 
-// 예약 조회 모달
 async function showReservations(roomId, roomNumber) {
-  const res = await fetch(`${baseUrl}/api/admin/reservations?roomId=${roomId}`, {
+  const res = await fetch(`${baseUrl}/admin/rooms/${roomId}/reservations`, {
     headers: { Authorization: authHeader }
   });
   const list = await res.json();
@@ -86,20 +80,15 @@ async function showReservations(roomId, roomNumber) {
   } else {
     list.forEach(r => {
       const li = document.createElement('li');
-      li.textContent = `[${r.status}] ${r.startTime} ~ ${r.endTime} (Member: ${r.memberId || r.member.memberId})`;
+      li.textContent = `[${r.status}] ${r.startTime} ~ ${r.endTime} (Member: ${r.member.memberId})`;
       ul.appendChild(li);
     });
   }
-  document.getElementById('reservation-modal').classList.remove('hidden');
+  document.getElementById('reservation-modal').classList.add('active');
 }
 
-// 모달 닫기
-document.getElementById('btn-close-modal').addEventListener('click', () => {
-  document.getElementById('reservation-modal').classList.add('hidden');
-});
-
-// 생성 버튼
 document.getElementById('btn-create').addEventListener('click', createRoom);
-
-// 초기 로드
+document.getElementById('btn-close-modal').addEventListener('click', () => {
+  document.getElementById('reservation-modal').classList.remove('active');
+});
 window.addEventListener('DOMContentLoaded', loadRooms);
