@@ -21,12 +21,12 @@ public class Room {
     private Long roomId;
     
     @Column(name = "room_number", unique = true, nullable = false)
-    private String roomNumber;
+    private Long roomNumber;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations;
 
-    public Room(Long id, String roomNumber) {
+    public Room(Long id, Long roomNumber) {
         this.roomId = id;
         this.roomNumber = roomNumber;
     }
