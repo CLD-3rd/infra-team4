@@ -131,7 +131,7 @@ body {
 }
 
 /* 룸 목록 그리드 */
-.grid, .room-list {
+.grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
