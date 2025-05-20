@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cloudboot.room_reservation.alarm.enumerate.ReservationMailStatus;
 import com.cloudboot.room_reservation.member.entity.Member;
@@ -55,6 +56,21 @@ public class ReservationEmailSender {
 				reservation);
 		
 	}	
+	
+	/**
+	 * 예약 알림 전송
+	 * - APPROVED (승인)
+	 * - REJECTED (거절)
+	 * - CANCELED (취소)
+	 * @param reservation
+	 */
+	@Transactional
+	public void send(Reservation reservation) {
+		// fetch join 하여 데이터 가져옴
+		reservationRepository.findByReservationId(reservation.getReservationId());
+		send(ReservationMailStatus.valueOf(reservation.getStatus().toString()), 
+				reservation);
+	}
 	
 	/**
 	 * 10분 전 예약 알림 전송
