@@ -77,12 +77,12 @@ roomButtons.forEach(button => {
 //4. 예약 버튼 클릭
 reserveBtn.addEventListener('click', () => {
   if (selectedTime && reservationDateInput.value && selectedRoom) {
-    const roomIdMap = {
+    const roomNumberMap = {
       Room1: 101,
       Room2: 102,
       Room3: 103
     };
-    const roomId = roomIdMap[selectedRoom];
+    const roomNumber = roomNumberMap[selectedRoom];
     //const memberId = 1; // 실제 로그인 사용자 ID로 교체
 
     const startTime = `${reservationDateInput.value}T${selectedTime}`;
@@ -94,7 +94,7 @@ reserveBtn.addEventListener('click', () => {
     const endTime = `${endDate.getFullYear()}-${pad(endDate.getMonth() + 1)}-${pad(endDate.getDate())}T${pad(endDate.getHours())}:${pad(endDate.getMinutes())}`;
 
     const reservationData = {
-      roomId,
+      roomNumber,
       startTime,
       endTime
     };

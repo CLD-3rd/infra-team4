@@ -56,7 +56,7 @@ function fetchReservations() {
 
         card.innerHTML = `
           <div class="row"><span class="label">예약 ID:</span> ${reservation.reservationId}</div>
-          <div class="row"><span class="label">방 번호:</span> ${reservation.roomId}</div>
+          <div class="row"><span class="label">방 번호:</span> ${reservation.roomNumber}</div>
           <div class="row"><span class="label">시작 시간:</span> ${formatDateTime(reservation.startTime)}</div>
           <div class="row"><span class="label">종료 시간:</span> ${formatDateTime(reservation.endTime)}</div>
           <div class="row"><span class="label">상태:</span> ${translatedStatus}</div>
@@ -89,7 +89,7 @@ function cancelReservation(reservationId) {
       alert("예약이 취소되었습니다.");
 
       const card = document.querySelector(`.cancel-btn[onclick*="${reservationId}"]`).closest(".reservation-card");
-      const roomIdText = card.querySelector(".row:nth-child(2)").textContent.split(":")[1].trim();
+      const roomNumberText = card.querySelector(".row:nth-child(2)").textContent.split(":")[1].trim();
       const startTimeText = card.querySelector(".row:nth-child(3)").textContent;
 
       const roomMap = {
@@ -97,7 +97,7 @@ function cancelReservation(reservationId) {
         "102": "Room2",
         "103": "Room3"
       };
-      const roomName = roomMap[roomIdText];
+      const roomName = roomMap[roomNumberText];
 
       const match = startTimeText.match(/(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일\s*(\d{1,2})시/);
       if (match) {

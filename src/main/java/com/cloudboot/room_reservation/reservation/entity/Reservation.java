@@ -57,13 +57,13 @@ public class Reservation {
 		return this.member.getUsername();
 	}
 	
-	public int getRoomNumber() {
+	public Long getRoomNumber() {
 		return this.room.getRoomNumber();
 	}
 
 
 
-	public Reservation(Long reservationId, Room roomNumber, LocalDateTime startTime, LocalDateTime endTime, ReservationStatus reservationStatus, Member member) {
+	public Reservation(Long reservationId, Room room, LocalDateTime startTime, LocalDateTime endTime, ReservationStatus reservationStatus, Member member) {
 		this.reservationId = reservationId;
 		this.room = room;
 		this.startTime = startTime;
