@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -53,6 +54,12 @@ public class SecurityConfig {
 
 
     @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+            .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico");
+    }
+    
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
@@ -61,27 +68,27 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/html/auth/**", "/html/main/**", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
-                        .requestMatchers(  "/html/room-manage/**", "/css/room-manage/**", "/js/room-manage/**").permitAll()
+                        .requestMatchers("/", "/html/**", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/auth/**", "/main/**", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
+                        .requestMatchers(  "/room-manage/**", "/css/room-manage/**", "/js/room-manage/**").permitAll()
 
                         // 사용자
-                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/index.html",
+                        .requestMatchers("/index.html",
                                         "/api/join", "/api/login", "/reissue", "/api/logout", "/mail/**").permitAll()
                                 .requestMatchers(
-                                        "/html/dashboard/change-password.html",
-                                        "/html/dashboard/my-profile.html",
-                                        "/html/dashboard/user-dashboard",
-                                        "/html/notice/notice.html",
-                                        "/html/reservation/reserve-list.html",
-                                        "/html/reservation/reserve.html"
+                                        "/dashboard/change-password.html",
+                                        "/dashboard/my-profile.html",
+                                        "/dashboard/user-dashboard",
+                                        "/notice/notice.html",
+                                        "/reservation/reserve-list.html",
+                                        "/reservation/reserve.html"
                                 ).hasRole("USER")
 
                                 .requestMatchers(
-                                        "/html/dashboard/admin-dashboard.html",
-                                        "/html/dashboard/member-manage.html",
-                                        "/html/notice/admin-notice.html",
-                                        "/html/reservation/admin-reservation.html"
+                                        "/dashboard/admin-dashboard.html",
+                                        "/dashboard/member-manage.html",
+                                        "/notice/admin-notice.html",
+                                        "/reservation/admin-reservation.html"
                                 ).hasRole("ADMIN")
                                 .requestMatchers("/api/member/**", "/api/reservations/**", "/api/notice/**").hasRole("USER")
                                 .requestMatchers("/api/admin/**", "/admin").hasRole("ADMIN")
