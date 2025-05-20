@@ -97,7 +97,7 @@ public class SecurityConfig {
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, "/api/login"),
                         UsernamePasswordAuthenticationFilter.class)
-                //.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class) 0519 임시
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository, "/api/logout"), UsernamePasswordAuthenticationFilter.class);
 
 
