@@ -257,3 +257,6 @@ buildNumber.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+# Local 설정파일
+application-local.yml

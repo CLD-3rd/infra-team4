@@ -59,4 +59,15 @@ public class Reservation {
     public String getRoomNumber() {
         return this.room.getRoomNumber();
     }
+
+	public Reservation(long reservationId, Room room, LocalDateTime startTime, LocalDateTime endTime, ReservationStatus status,
+			Member member) {
+		this.reservationId = reservationId;
+		this.room = room;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.status = status;
+		this.member = member;
+		
+	}
 }

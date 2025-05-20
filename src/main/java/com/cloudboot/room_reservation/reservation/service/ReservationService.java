@@ -35,7 +35,7 @@ public class ReservationService {
     public void createReservation(ReservationRequestDto request) {
         Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        Room room = roomRepository.findByRoomNumber(request.getRoomNumber())
+        Room room = roomRepository.findByRoomNumber(String.valueOf(request.getRoomNumber()))
                 .orElseThrow(() -> new IllegalArgumentException("해당 룸이 존재하지 않습니다."));
         LocalDateTime now = LocalDateTime.now();
         if (request.getStartTime().isBefore(now.plusHours(2))) {
