@@ -26,8 +26,11 @@ function translateStatus(status) {
 
 // 사용자 예약 목록 불러오기
 function fetchReservations() {
-  fetch(`/api/reservations/member/${memberId}`)
-    .then(res => res.json())
+  fetch("/api/reservations/member")
+    .then(res => {
+      if (!res.ok) throw new Error("예약 정보를 불러오는 데 실패했습니다.");
+      return res.json();
+    })
     .then(data => {
       reservationListContainer.innerHTML = ""; // 초기화
 

@@ -3,6 +3,7 @@ package com.cloudboot.room_reservation.reservation.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.cloudboot.room_reservation.member.dto.CustomMemberDetails;
 import com.cloudboot.room_reservation.reservation.dto.request.ReservationRequestDto;
 import com.cloudboot.room_reservation.reservation.dto.response.ReservationListResponseDto;
 import com.cloudboot.room_reservation.reservation.service.ReservationService;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
-@RequestMapping({"/api/reservations"})
+@RequestMapping({"/api/member/reservations"})
 @Slf4j
 public class ReservationController {
     private final ReservationService reservationService;
@@ -40,9 +42,11 @@ public class ReservationController {
         return ResponseEntity.status(HttpStatus.OK).body(body);
     }
     // 모든 예약
-    @GetMapping({"/member/{memberId}"})
-    public ResponseEntity<List<ReservationListResponseDto>> getMyReservations(@PathVariable Long memberId) {
-        return ResponseEntity.ok(this.reservationService.getUserReservations(memberId));
+    @GetMapping("/member")
+    public ResponseEntity<List<ReservationListResponseDto>> getMyReservations(
+            @AuthenticationPrincipal CustomMemberDetails memberDetails) {
+        Long memberId = memberDetails.getId();
+        return ResponseEntity.ok(reservationService.getUserReservations(memberId));
     }
     // 예약 상세 정보
     @GetMapping({"/detail/{reservationId}"})
