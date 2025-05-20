@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>관리자 대시보드</title>
+    <link rel="stylesheet" href="/css/dashboard/admin-dashboard.css" />
+</head>
+<body>
+<!-- 좌측 상단 로고 -->
+<div class="psr-logo" onclick="window.location.href='/html/dashboard/admin-dashboard.html'">PSR</div>
+
+<!-- 우측 상단 프로필 -->
+<div class="profile-wrapper" id="profileWrapper">
+    <img
+            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+            alt="프로필 사진"
+            class="profile-pic"
+            id="profilePic"
+    />
+    <div class="profile-menu" id="profileMenu">
+        <button id="profileSettingsBtn">프로필 설정</button>
+        <button id="logoutBtn">로그아웃</button>
+    </div>
+</div>
+
+<!-- 대시보드 컨텐츠 -->
+<div class="container">
+    <h1>관리자 대시보드</h1>
+    <button class="btn" onclick="alert('공지사항 관리 기능은 아직 구현되지 않았습니다.')">공지사항 관리</button>
+    <button class="btn" onclick="alert('룸 관리 기능은 아직 구현되지 않았습니다.')">룸 관리</button>
+    <button class="btn" onclick="alert('예약 관리 기능은 아직 구현되지 않았습니다.')">예약 관리</button>
+    <button class="btn" onclick="location.href='member-manage.html'">회원 관리</button>
+</div>
+
+<script src="/js/dashboard/admin-dashboard.js"></script>
+</body>
+</html>

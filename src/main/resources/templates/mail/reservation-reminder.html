@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>스터디룸 예약 알림</title>
+  </head>
+  <body style="margin:0; padding:0; font-family:Arial, sans-serif; background-color:#f8f8f8;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="padding: 20px;">
+      <tr>
+        <td align="center">
+          <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff; border:1px solid #e0e0e0; border-radius:8px; padding: 30px;">
+            <tr>
+              <td align="center" style="padding-bottom: 20px;">
+                <h2 style="color:#333333; margin:0;">🔔 스터디룸 예약 10분 전입니다</h2>
+              </td>
+            </tr>
+            <tr>
+              <td style="font-size:16px; color:#333333; line-height:1.6;">
+                <p><strong>${name}</strong>님, 예약하신 스터디룸 이용 시간이 10분 남았습니다.</p>
+
+                <table width="100%" style="margin: 20px 0; font-size:14px; color:#555;">
+                  <tr>
+                    <td style="padding: 5px 0;"><strong>⏰ 예약 일시:</strong> ${startTime} ~ ${endTime}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 5px 0;"><strong>🏠 스터디룸:</strong> ${room}</td>
+                  </tr>
+                </table>
+
+                <p>이용 준비를 마쳐 주세요.<br/>
+                원활한 이용을 위해 예약 시간 전에 도착해 주세요 😊</p>
+
+                <p style="margin-top: 20px;">감사합니다.</p>
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="padding-top:30px; font-size:12px; color:#aaaaaa;">
+                ※ 본 메일은 시스템에 의해 자동으로 발송되었습니다.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>회원 관리</title>
+    <link rel="stylesheet" href="/css/dashboard/member-manage.css" />
+</head>
+<body>
+<div id="notificationBar"></div>
+
+<div class="psr-logo" onclick="location.href='/html/dashboard/dashboard.html'">PSR</div>
+
+<div class="profile-wrapper" id="profileWrapper" tabindex="0">
+    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="프로필 사진" class="profile-pic" id="profilePic" />
+    <div class="profile-menu" id="profileMenu">
+        <button id="profileSettingsBtn">프로필 설정</button>
+        <button id="logoutBtn">로그아웃</button>
+    </div>
+</div>
+
+<div class="container">
+    <h1>회원 관리</h1>
+    <div class="loading" id="loadingText">회원 정보를 불러오는 중...</div>
+    <table id="memberTable" style="display: none;">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>아이디</th>
+            <th>권한</th>
+        </tr>
+        </thead>
+        <tbody id="memberBody"></tbody>
+    </table>
+</div>
+
+<div class="modal" id="roleModal">
+    <h3>권한 수정</h3>
+    <select id="roleSelect">
+        <option value="ROLE_USER">USER</option>
+        <option value="ROLE_ADMIN">ADMIN</option>
+    </select>
+    <button id="saveRoleBtn">저장</button>
+</div>
+
+<div class="pagination" id="paginationContainer"></div>
+
+<script src="/js/dashboard/member-manage.js"></script>
+</body>
+</html>
