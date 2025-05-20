@@ -93,7 +93,7 @@ public class SecurityConfig {
                                 response.sendRedirect("/html/auth/index.html")
                         )
                         .accessDeniedHandler((request, response, accessDeniedException) ->
-                                response.sendRedirect("/html/auth/test.html")
+                                response.sendRedirect("/html/auth/index.html")
                         )
                 );
 

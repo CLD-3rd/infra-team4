@@ -59,7 +59,6 @@ public class Reservation {
     public String getRoomNumber() {
         return this.room.getRoomNumber();
     }
-
 	public Reservation(long reservationId, Room room, LocalDateTime startTime, LocalDateTime endTime, ReservationStatus status,
 			Member member) {
 		this.reservationId = reservationId;
