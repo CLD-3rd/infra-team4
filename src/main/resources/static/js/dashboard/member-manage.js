@@ -21,7 +21,7 @@ window.addEventListener('click', (e) => {
 });
 
 document.getElementById('profileSettingsBtn').addEventListener('click', () => {
-    window.location.href = 'profile_detail.html';
+    window.location.href = '/html/dashboard/profile_detail.html';
     profileMenu.classList.remove('active');
 });
 
@@ -64,7 +64,7 @@ async function fetchMembers(page = 0) {
         const response = await fetch(`/admin/members?page=${page}&size=5`, {
             headers: {
                 'Content-Type': 'application/json',
-                'access': `${accessToken}`
+                'Authorization': `Bearer ${accessToken}`
             }
         });
 
@@ -161,7 +161,7 @@ document.getElementById('saveRoleBtn').addEventListener('click', async () => {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'access': `${accessToken}`
+                'Authorization': `Bearer ${accessToken}`
             },
             body: JSON.stringify({ role: selectedRole })
         });

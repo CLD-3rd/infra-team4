@@ -22,7 +22,7 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
         });
 
         if (response.ok) {
-            window.location.href = '/html/index.html';
+            window.location.href = '/html/auth/index.html';
         } else {
             alert('로그아웃에 실패했습니다.');
         }

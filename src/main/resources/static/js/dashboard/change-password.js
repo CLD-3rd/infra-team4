@@ -20,7 +20,7 @@ form.addEventListener('submit', async (e) => {
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                'access': accessToken
+                'Authorization': `Bearer ${accessToken}`
             },
             body: JSON.stringify(data)
         });

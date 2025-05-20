@@ -59,19 +59,24 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // 페이지
                         .requestMatchers("/", "/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/html/auth/**", "/index.html", "/html/main/**", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
+                        .requestMatchers("/html/auth/**", "/html/main/**", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
 
                         // 사용자
                         .requestMatchers(
-                                "/html/dashboard/user-dashboard.html",
+                                "/html/dashboard/change-password.html",
                                 "/html/dashboard/my-profile.html",
-                                "/html/dashboard/change-password.html"
+                                "/html/notice/notice.html",
+                                "/html/reservation/reserve-list.html",
+                                "/html/reservation/reserve.html"
                         ).hasRole("USER")
 
                         // 관리자
                         .requestMatchers(
                                 "/html/dashboard/admin-dashboard.html",
-                                "/html/dashboard/member-manage.html"
+                                "/html/dashboard/member-manage",
+                                "/html/dashboard/user-dashboard",
+                                "/html/notice/admin-notice.html",
+                                "/html/reservation/admin-reservation"
                         ).hasRole("ADMIN")
 
                         // 사용자 API
@@ -84,10 +89,10 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) ->
-                                response.sendRedirect("/html/auth/index.html")
+                                response.sendRedirect("/html/notice/notice.html")
                         )
                         .accessDeniedHandler((request, response, accessDeniedException) ->
-                                response.sendRedirect("/html/auth/index.html")
+                                response.sendRedirect("/html/reservation/reserve.html")
                         )
                 );
 
