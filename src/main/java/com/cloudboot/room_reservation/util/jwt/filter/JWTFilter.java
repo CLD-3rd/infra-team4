@@ -53,7 +53,7 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
 
-        // access Token은 있는데 만료 되었으면 다음 필터 이동 없이, 바로 종료
+
         try {
             jwtUtil.isExpired(accessToken);
         } catch (ExpiredJwtException e) {
