@@ -116,8 +116,6 @@ function cancelReservation(reservationId) {
       }
 
       fetchReservations(); // 목록 갱신
-	  // 리프레시 코드
-//	  location.reload();
     })
     .catch(err => {
       console.error("예약 취소 중 오류 발생", err);
