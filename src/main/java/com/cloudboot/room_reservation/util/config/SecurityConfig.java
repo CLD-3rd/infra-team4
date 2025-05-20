@@ -1,5 +1,6 @@
 package com.cloudboot.room_reservation.util.config;
 import com.cloudboot.room_reservation.member.repository.RefreshRepository;
+import com.cloudboot.room_reservation.member.service.ReissueService;
 import com.cloudboot.room_reservation.util.jwt.filter.CustomLogoutFilter;
 import com.cloudboot.room_reservation.util.jwt.filter.JWTFilter;
 import com.cloudboot.room_reservation.util.jwt.filter.LoginFilter;
@@ -30,11 +31,14 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
+    private final ReissueService reissueService;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil,
+                          ReissueService reissueService, RefreshRepository refreshRepository) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
+        this.reissueService = reissueService;
     }
 
     @Bean
@@ -97,7 +101,7 @@ public class SecurityConfig {
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, "/api/login"),
                         UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
+                .addFilterBefore(new JWTFilter(jwtUtil, reissueService), LoginFilter.class)
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository, "/api/logout"), UsernamePasswordAuthenticationFilter.class);
 
 
