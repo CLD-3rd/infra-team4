@@ -76,8 +76,6 @@ public class SecurityConfig {
                         .requestMatchers("/", "/index.html",
                                         "/api/join", "/api/login", "/reissue", "/api/logout", "/mail/**").permitAll()
                                 .requestMatchers(
-                                        "/html/dashboard/change-password.html",
-                                        "/html/dashboard/my-profile.html",
                                         "/html/dashboard/user-dashboard",
                                         "/html/notice/notice.html",
                                         "/html/reservation/reserve-list.html",
@@ -88,11 +86,12 @@ public class SecurityConfig {
                                         "/html/dashboard/admin-dashboard.html",
                                         "/html/dashboard/member-manage.html",
                                         "/html/notice/admin-notice.html",
-                                        "/html/reservation/admin-reservation.html"
+                                        "/html/reservation/admin-reservation.html",
+                                        "/html/dashboard/admin-profile.html"
                                 ).hasRole("ADMIN")
                                 .requestMatchers("/api/member/**", "/api/reservations/**", "/api/notice/**").hasRole("USER")
                                 .requestMatchers("/api/admin/**", "/admin").hasRole("ADMIN")
-                                .requestMatchers("/api/member").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers("/api/member", "/html/dashboard/my-profile.html", "/html/dashboard/change-password.html").hasAnyRole("USER", "ADMIN")
 
                         .anyRequest().authenticated()
                 )

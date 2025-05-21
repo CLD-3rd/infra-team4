@@ -13,24 +13,27 @@ public class JoinDTO {
 
     private String password;
 
+    private Role role;
+
 
     protected JoinDTO() {
     }
 
-    private JoinDTO(String username, String password) {
+    private JoinDTO(String username, String password, Role role) {
         this.username = username;
         this.password = password;
+        this.role = role;
     }
 
-    public static JoinDTO of(String username, String password) {
-        return new JoinDTO(username, password);
+    public static JoinDTO of(String username, String password, Role role) {
+        return new JoinDTO(username, password, role);
     }
 
     public static JoinDTO from(JoinRequest joinRequest) {
-        return of(joinRequest.getUsername(), joinRequest.getPassword());
+        return of(joinRequest.getUsername(), joinRequest.getPassword(), joinRequest.getRole());
     }
 
     public static Member toEntity(JoinDTO joinDTO) {
-        return Member.of(joinDTO.getUsername(), joinDTO.getPassword(), Role.ROLE_USER);
+        return Member.of(joinDTO.getUsername(), joinDTO.getPassword(), joinDTO.getRole());
     }
 }

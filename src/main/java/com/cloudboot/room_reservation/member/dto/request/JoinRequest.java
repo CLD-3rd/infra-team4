@@ -1,5 +1,6 @@
 package com.cloudboot.room_reservation.member.dto.request;
 
+import com.cloudboot.room_reservation.member.enumerate.Role;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
@@ -23,6 +24,8 @@ public class JoinRequest {
             message = "비밀번호는 영어, 숫자, 특수문자를 각각 하나 이상 포함하고 8자 이상이어야 합니다."
     )
     private String passwordConfirm;
+
+    private Role role;
 
     public JoinRequest() {
     }
