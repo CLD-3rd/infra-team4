@@ -4,7 +4,6 @@ spring:
   jwt:
     secret: "6fmZPo9Ep9SFkLMnm7gSfz6UijdfbsSDW2dfsiZBaS"
 
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://room-mysql-container:3306/infra?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
@@ -19,6 +18,14 @@ spring:
       hibernate:
         default_batch_fetch_size: 100
         format_sql: true
+  sql:
+    init:
+      continue-on-error: true
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+    hikari:
+      initialization-fail-timeout: 60000
+      connection-timeout: 30000
 
   mail:
     host: smtp.gmail.com
