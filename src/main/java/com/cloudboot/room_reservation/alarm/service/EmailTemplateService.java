@@ -1,9 +1,8 @@
 package com.cloudboot.room_reservation.alarm.service;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -26,14 +25,15 @@ public class EmailTemplateService {
 	
 	public String emailTemplate(final String resourceName, Map<String, String> data) {
 		
-		try {
-			final File resource = new ClassPathResource(MAIL_TEMPLATE_PATH + resourceName).getFile();
-			String html = Files.readString(resource.toPath(), StandardCharsets.UTF_8);
-				
+		ClassPathResource resource = new ClassPathResource(MAIL_TEMPLATE_PATH + resourceName);
+		
+		try (InputStream is = resource.getInputStream()) {
+			String html = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+
 			for (Entry<String, String> entry : data.entrySet()) {
 				html = html.replace(VARIABLE_PREFIX + entry.getKey() + VARIABLE_SUFFIX, entry.getValue());
 			}
-			
+
 			return html;
 			
 		} catch (IOException e) {
