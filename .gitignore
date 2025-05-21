@@ -260,3 +260,6 @@ buildNumber.properties
 
 # Local 설정파일
 application-local.yml
+
+# jar 파일
+/target
