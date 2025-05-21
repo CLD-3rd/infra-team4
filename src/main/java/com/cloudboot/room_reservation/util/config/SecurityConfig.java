@@ -90,7 +90,7 @@ public class SecurityConfig {
                                         "/html/dashboard/admin-profile.html"
                                 ).hasRole("ADMIN")
                                 .requestMatchers("/api/member/**", "/api/reservations/**", "/api/notice/**").hasRole("USER")
-                                .requestMatchers("/api/admin/**", "/admin").hasRole("ADMIN")
+                                .requestMatchers("/api/admin/**", "/admin", "/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/member", "/html/dashboard/my-profile.html", "/html/dashboard/change-password.html").hasAnyRole("USER", "ADMIN")
 
                         .anyRequest().authenticated()
@@ -119,7 +119,7 @@ public class SecurityConfig {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration configuration = new CorsConfiguration();
 
-                        configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500", "http://127.0.0.1:8080", "http://localhost:8080"));
+                        configuration.setAllowedOrigins(Arrays.asList("http://52.78.167.174:8080", "http://127.0.0.1:8080", "http://localhost:8080"));
                         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
