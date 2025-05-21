@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cloudboot.room_reservation.alarm.dto.EmailRequest;
-import com.cloudboot.room_reservation.alarm.service.ReservationEmailSender;
+import com.cloudboot.room_reservation.alarm.service.ReservationEmailService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/mail")
 public class EmailController {
 	
-	private final ReservationEmailSender emailSender;
+	private final ReservationEmailService emailSender;
 	
 	
 	/**

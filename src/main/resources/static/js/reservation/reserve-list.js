@@ -106,9 +106,9 @@ function cancelReservation(reservationId) {
         const time = `${hour.padStart(2, '0')}:00`;
         const key = `${date}|${roomName}`;
 
-        if (mockReservations[key]) {
-          mockReservations[key] = mockReservations[key].filter(t => t !== time);
-        }
+//        if (mockReservations[key]) {
+//          mockReservations[key] = mockReservations[key].filter(t => t !== time);
+//        }
 
         if (typeof renderTimeSlots === "function") {
           renderTimeSlots(reservationDateInput.value, selectedRoom);

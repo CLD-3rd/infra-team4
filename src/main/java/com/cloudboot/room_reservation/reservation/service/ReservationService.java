@@ -1,6 +1,6 @@
 package com.cloudboot.room_reservation.reservation.service;
 
-import com.cloudboot.room_reservation.alarm.service.ReservationEmailSender;
+import com.cloudboot.room_reservation.alarm.service.ReservationEmailService;
 import com.cloudboot.room_reservation.member.entity.Member;
 import com.cloudboot.room_reservation.member.repository.MemberRepository;
 import com.cloudboot.room_reservation.reservation.dto.request.ReservationRequestDto;
@@ -12,6 +12,9 @@ import com.cloudboot.room_reservation.room.entity.Room;
 import com.cloudboot.room_reservation.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +30,7 @@ public class ReservationService {
     private final RoomRepository roomRepository;
     private final MemberRepository memberRepository;
     
-    private final ReservationEmailSender reservationEmailSender;
+    private final ReservationEmailService reservationEmailSender;
     
 
     // 1. 사용자) 예약 생성
@@ -75,7 +78,8 @@ public class ReservationService {
     }
     // 3. 사용자) 예약 목록 조회
     public List<ReservationListResponseDto> getUserReservations(Long memberId) {
-        List<Reservation> reservations = reservationRepository.findAllByMember_MemberId(memberId);
+    	Sort sort = Sort.by(Direction.DESC, "reservationId");
+        List<Reservation> reservations = reservationRepository.findAllByMember_MemberId(memberId, sort);
         return reservations.stream()
                 .map(ReservationListResponseDto::fromEntity)
                 .collect(Collectors.toList());

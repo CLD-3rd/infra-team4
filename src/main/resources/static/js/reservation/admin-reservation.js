@@ -49,7 +49,7 @@ function fetchAllReservations() {
         card.innerHTML = `
           <div><strong>예약 ID:</strong> ${reservation.reservationId}</div>
           <div><strong>회원 ID:</strong> ${reservation.memberId}</div>
-          <div><strong>방 번호:</strong> ${reservation.roomId}</div>
+          <div><strong>방 번호:</strong> ${reservation.roomNumber}</div>
           <div><strong>시작:</strong> ${formatDateTime(reservation.startTime)}</div>
           <div><strong>종료:</strong> ${formatDateTime(reservation.endTime)}</div>
           <div><strong>상태:</strong> ${status}</div>

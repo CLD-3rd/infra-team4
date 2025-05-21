@@ -21,7 +21,7 @@ public class ReservationListResponseDto {
         return ReservationListResponseDto.builder()
                 .reservationId(reservation.getReservationId())
                 .memberId(reservation.getMember().getMemberId())
-                .roomNumber(reservation.getRoom().getRoomId())
+                .roomNumber(Long.parseLong(reservation.getRoom().getRoomNumber()))
                 .startTime(reservation.getStartTime().toString().substring(0,16))  // yyyy-MM-dd HH:mm
                 .endTime(reservation.getEndTime().toString().substring(0,16))
                 .status(reservation.getStatus().name())

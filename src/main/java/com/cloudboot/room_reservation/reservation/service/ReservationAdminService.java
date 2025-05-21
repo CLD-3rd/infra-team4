@@ -1,6 +1,6 @@
 package com.cloudboot.room_reservation.reservation.service;
 
-import com.cloudboot.room_reservation.alarm.service.ReservationEmailSender;
+import com.cloudboot.room_reservation.alarm.service.ReservationEmailService;
 import com.cloudboot.room_reservation.reservation.dto.response.ReservationListResponseDto;
 import com.cloudboot.room_reservation.reservation.entity.Reservation;
 import com.cloudboot.room_reservation.reservation.enumerate.ReservationStatus;
@@ -19,7 +19,7 @@ public class ReservationAdminService {
     
 	private final ReservationRepository reservationRepository;
 	
-	private final ReservationEmailSender reservationEmailSender;
+	private final ReservationEmailService reservationEmailSender;
     
 
     // 1. 관리자) 예약 승인
@@ -63,7 +63,7 @@ public class ReservationAdminService {
 
     // 3. 관리자) 전체 예약 목록 조회
     public List<ReservationListResponseDto> getAllReservations() {
-        List<Reservation> reservations = reservationRepository.findAll();
+        List<Reservation> reservations = reservationRepository.findAllByOrderByReservationIdDesc();
         return reservations.stream()
                 .map(ReservationListResponseDto::fromEntity)
                 .collect(Collectors.toList());
