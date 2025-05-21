@@ -53,6 +53,8 @@ public class CustomLogoutFilter extends GenericFilterBean {
         }
 
 
+        //get access token
+        String access = null;
         //get refresh token
         String refresh = null;
         Cookie[] cookies = request.getCookies();
@@ -62,10 +64,19 @@ public class CustomLogoutFilter extends GenericFilterBean {
                 if ("refresh".equals(cookie.getName())) {
                     refresh = cookie.getValue();
                 }
+                else if("access".equals(cookie.getName())) {
+                    access = cookie.getValue();
+                }
             }
         }
 
         log.info("refresh = {}", refresh);
+        log.info("access = {}", access);
+
+        if (access == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
 
         //refresh null check
         if (refresh == null) {
@@ -99,8 +110,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
             return;
         }
 
-        log.info("해당 refresh 토큰은 DB에 존재합니다. 따라서 Access Token과 Refresh Token 재발급을 진행하겠습니다.");
-
         //로그아웃 진행
         //Refresh 토큰 DB에서 제거
         refreshRepository.deleteByRefresh(refresh);
@@ -110,7 +119,13 @@ public class CustomLogoutFilter extends GenericFilterBean {
         cookie.setMaxAge(0);
         cookie.setPath("/");
 
+        //Access 토큰 Cookie 값 0
+        Cookie cookie2 = new Cookie("access", null);
+        cookie2.setMaxAge(0);
+        cookie2.setPath("/");
+
         response.addCookie(cookie);
+        response.addCookie(cookie2);
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

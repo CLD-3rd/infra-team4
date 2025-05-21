@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>룸 관리</title>
+  <!-- CSS 경로를 실제 위치로 맞춤 -->
+  <link rel="stylesheet" href="/css/room-manage/room-manage.css" />
+</head>
+<body>
+  <!-- 좌측 상단 로고 -->
+  <div class="psr-logo" onclick="window.location.href='/dashboard.html'">PSR</div>
+
+  <!-- 우측 상단 프로필 -->
+  <div class="profile-wrapper" id="profileWrapper">
+    <img
+      src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+      alt="프로필 사진"
+      class="profile-pic"
+      id="profilePic"
+    />
+    <div class="profile-menu" id="profileMenu">
+      <button id="profileSettingsBtn" class="btn">프로필 설정</button>
+      <button id="logoutBtn" class="btn">로그아웃</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>룸 관리</h1>
+
+    <!-- 룸 등록 폼 -->
+    <div class="card input-area">
+      <input
+        type="text"
+        id="roomNumberInput"
+        placeholder="새 룸 번호 입력"
+        class="input"
+      />
+      <button id="btn-create" class="btn">등록</button>
+    </div>
+
+    <!-- 룸 목록 그리드 -->
+    <div class="grid" id="room-grid">
+      <!-- JS로 채워집니다 -->
+    </div>
+  </div>
+
+  <!-- 예약 모달 -->
+  <div id="reservation-modal" class="modal">
+    <div class="modal-content">
+      <h2>예약 목록 for <span id="modal-room-number"></span></h2>
+      <ul id="reservation-list"></ul>
+      <button id="btn-close-modal" class="btn">닫기</button>
+    </div>
+  </div>
+
+  <!-- JS 경로를 실제 위치로 맞춤 -->
+  <script src="/js/room-manage/room-manage.js"></script>
+  <script>
+    // 프로필 메뉴 토글
+    const profileWrapper = document.getElementById('profileWrapper');
+    const profileMenu = document.getElementById('profileMenu');
+    profileWrapper.addEventListener('click', () => {
+      profileMenu.classList.toggle('active');
+    });
+    window.addEventListener('click', (e) => {
+      if (!profileWrapper.contains(e.target)) {
+        profileMenu.classList.remove('active');
+      }
+    });
+
+    // 모달 닫기
+    document.getElementById('btn-close-modal').addEventListener('click', () => {
+      document.getElementById('reservation-modal').classList.remove('active');
+    });
+  </script>
+</body>
+</html>

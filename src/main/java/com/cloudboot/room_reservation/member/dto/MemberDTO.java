@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class MemberDTO {
 
-    private Long id;
+    private Long memberId;
 
     private String username;
 
@@ -19,7 +19,7 @@ public class MemberDTO {
     }
 
     private MemberDTO(Long id, String username, String password, Role role) {
-        this.id = id;
+        this.memberId = id;
         this.username = username;
         this.password = password;
         this.role = role;
@@ -30,6 +30,6 @@ public class MemberDTO {
     }
 
     public static MemberDTO from(Member member) {
-        return MemberDTO.of(member.getId(), member.getUsername(), member.getPassword(), member.getRole());
+        return MemberDTO.of(member.getMemberId(), member.getUsername(), member.getPassword(), member.getRole());
     }
 }

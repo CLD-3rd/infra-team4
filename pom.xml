@@ -67,8 +67,6 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-
-		<!-- Test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -110,6 +108,9 @@
 				<configuration>
 					<source>17</source>
 					<target>17</target>
+					<compilerArgs>
+			            <arg>-parameters</arg>
+			        </compilerArgs>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>

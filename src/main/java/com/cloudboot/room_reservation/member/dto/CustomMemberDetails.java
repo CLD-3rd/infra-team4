@@ -15,7 +15,7 @@ public class CustomMemberDetails implements UserDetails {
     }
 
     public Long getId() {
-        return memberDTO.getId();
+        return memberDTO.getMemberId();
     }
 
     @Override

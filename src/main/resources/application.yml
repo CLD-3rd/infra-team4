@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: room-reservation
+  jwt:
+    secret: "6fmZPo9Ep9SFkLMnm7gSfz6UijdfbsSDW2dfsiZBaS"
+
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://room-mysql-container:3306/infra?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: root
+    password: 1234
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        format_sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: qleen513@gmail.com
+    password: gjwwbutunhkkgwjo
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

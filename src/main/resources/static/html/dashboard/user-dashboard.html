@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cloud Engineering Univ - 메인 화면</title>
+    <link rel="stylesheet" href="/css/dashboard/user-dashboard.css">
+</head>
+<body>
+<div class="psr-logo">RoomMate</div>
+
+<div class="profile-wrapper" id="profileWrapper" tabindex="0">
+    <img
+            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+            alt="프로필 사진"
+            class="profile-pic"
+            id="profilePic"
+    />
+    <div class="profile-menu" id="profileMenu">
+        <button id="profileSettingsBtn">프로필 설정</button>
+        <button id="myReservationsBtn">내 예약 보기</button>
+        <button id="logoutBtn">로그아웃</button>
+    </div>
+</div>
+
+<!-- 메인 영역 -->
+<main>
+    <div class="container">
+        <h1>Public Study Room</h1>
+        <button id="btnNotice" class="btn-notice">공지사항 보기</button>
+        <button id="btnReserve" class="btn-reservation">스터디룸 예약</button>
+    </div>
+</main>
+
+
+<script src="/js/main/profile-menu.js"></script>
+<script src="/js/dashboard/user-dashboard.js"></script>
+</body>
+</html>

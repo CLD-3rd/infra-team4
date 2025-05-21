@@ -30,7 +30,7 @@ public class MemberAdminResponse {
     }
 
     public static MemberAdminResponse from(Member member) {
-        return MemberAdminResponse.of(member.getId(), member.getUsername(), member.getRole());
+        return MemberAdminResponse.of(member.getMemberId(), member.getUsername(), member.getRole());
     }
 
 }

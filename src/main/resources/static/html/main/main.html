@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Public Study Room</title>
+    <link rel="stylesheet" href="/css/main/main.css" />
+</head>
+<body>
+
+<!-- 상단 헤더 -->
+<div class="psr-logo">RoomMate</div>
+
+<div class="profile-wrapper" id="profileWrapper">
+    <img class="profile-pic" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="프로필" />
+    <div class="profile-menu" id="profileMenu">
+        <button id="profileSettingsBtn">프로필 설정</button>
+        <button id="myReservationsBtn">내 예약 보기</button>
+        <button id="logoutBtn">로그아웃</button>
+    </div>
+</div>
+
+<!-- 메인 영역 -->
+<main>
+    <div class="main-card">
+        <h2>Public Study Room</h2>
+        <button onclick="goTo('notice.html')" class="btn blue">공지사항 보기</button>
+        <button onclick="goTo('reserve.html')" class="btn green">스터디룸 예약</button>
+    </div>
+</main>
+
+<!-- JS -->
+<script src="/js/main/profile-menu.js"></script>
+<script src="/js/main/main.js"></script>
+
+</body>
+</html>

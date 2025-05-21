@@ -1,6 +1,6 @@
 package com.cloudboot.room_reservation.util.config;
-
 import com.cloudboot.room_reservation.member.repository.RefreshRepository;
+import com.cloudboot.room_reservation.member.service.ReissueService;
 import com.cloudboot.room_reservation.util.jwt.filter.CustomLogoutFilter;
 import com.cloudboot.room_reservation.util.jwt.filter.JWTFilter;
 import com.cloudboot.room_reservation.util.jwt.filter.LoginFilter;
@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,11 +32,14 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
+    private final ReissueService reissueService;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil,
+                          ReissueService reissueService, RefreshRepository refreshRepository) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
+        this.reissueService = reissueService;
     }
 
     @Bean
@@ -48,6 +52,13 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+            .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico");
+    }
+    
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -55,18 +66,50 @@ public class SecurityConfig {
                 .logout(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable);
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                		.requestMatchers("/").permitAll()
+                		.requestMatchers("/html/auth/**", "/html/main/**", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
+                        .requestMatchers(  "/html/room-manage/**", "/css/room-manage/**", "/js/room-manage/**").permitAll()
 
-        http
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/api/join", "/api/login", "/reissue", "/api/logout").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated());
+                        // 사용자
+                        .requestMatchers("/", "/index.html",
+                                        "/api/join", "/api/login", "/reissue", "/api/logout", "/mail/**").permitAll()
+                                .requestMatchers(
+                                        "/html/dashboard/user-dashboard",
+                                        "/html/notice/notice.html",
+                                        "/html/reservation/reserve-list.html",
+                                        "/html/reservation/reserve.html"
+                                ).hasRole("USER")
+
+                                .requestMatchers(
+                                        "/html/dashboard/admin-dashboard.html",
+                                        "/html/dashboard/member-manage.html",
+                                        "/html/notice/admin-notice.html",
+                                        "/html/reservation/admin-reservation.html",
+                                        "/html/dashboard/admin-profile.html"
+                                ).hasRole("ADMIN")
+                                .requestMatchers("/api/member/**", "/api/reservations/**", "/api/notice/**").hasRole("USER")
+                                .requestMatchers("/api/admin/**", "/admin").hasRole("ADMIN")
+                                .requestMatchers("/api/member", "/html/dashboard/my-profile.html", "/html/dashboard/change-password.html").hasAnyRole("USER", "ADMIN")
+
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) ->
+                                response.sendRedirect("/html/auth/index.html")
+                        )
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                response.sendRedirect("/html/auth/index.html")
+                        )
+                );
+
+
 
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, "/api/login"),
                         UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
+                .addFilterBefore(new JWTFilter(jwtUtil, reissueService), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository, "/api/logout"), UsernamePasswordAuthenticationFilter.class);
 
 
@@ -76,13 +119,13 @@ public class SecurityConfig {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration configuration = new CorsConfiguration();
 
-                        configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500"));
+                        configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500", "http://127.0.0.1:8080", "http://localhost:8080"));
                         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
                         configuration.setMaxAge(3600L);
 
-                        configuration.setExposedHeaders(Arrays.asList("access", "redirect-url"));
+                        configuration.setExposedHeaders(Arrays.asList("access", "redirect-url", "Authorization"));
 
                         return configuration;
                     }
