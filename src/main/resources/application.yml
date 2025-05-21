@@ -9,15 +9,13 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-    url: jdbc:mysql://127.0.0.1:3306/security?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-    #url: jdbc:mysql://mysql-container:3306/security?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://room-mysql-container:3306/infra?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     username: root
-    password: "1234"  # 숫자만 있는 경우 따옴표로 감싸는 것이 안전
+    password: 1234
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     open-in-view: false
     properties:
       hibernate:
@@ -35,12 +33,3 @@ spring:
           auth: true
           starttls:
             enable: true
-#logging:
-#  level:
-#    org:
-#      springframework:
-#        security: DEBUG
-#      hibernate:
-#        SQL: debug
-#        orm.jdbc.bind: trace
-
