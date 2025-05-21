@@ -158,7 +158,7 @@ document.getElementById('saveRoleBtn').addEventListener('click', async () => {
 
     try {
         const response = await fetch(`/admin/members/${selectedMemberId}`, {
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
