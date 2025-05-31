@@ -10,6 +10,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -31,34 +32,35 @@ jobs:
           name: roommate
           path: ./target/*.jar
 
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/roommate:latest
+
   cd:
     needs: ci
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: roommate
-
-      - name: Deploy to EC2
-        uses: appleboy/scp-action@v1
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "*.jar"
-          target: "/home/ubuntu/roommate"
-
-      - name: Execute deployment script
+      - name: SSH into EC2 and Restart Container
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            mkdir -p /home/ubuntu/roommate/deploy
-            mv /home/ubuntu/roommate/*.jar /home/ubuntu/roommate/deploy/roommate.jar
-            sudo fuser -k -n tcp 8080 || true
-            cd /home/ubuntu/roommate/deploy
-            nohup java -jar roommate.jar > ./output.log 2>&1 &
+            cd /home/ubuntu/roommate
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/roommate:latest
+            docker-compose down
+            docker-compose up -d
