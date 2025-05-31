@@ -15,12 +15,20 @@ services:
       - ./dbinit:/docker-entrypoint-initdb.d
     networks:
       - room-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+
 
   room-spring-container:
-    build: .
+    image: nniinjjii/roommate:latest
     container_name: room-spring-container
     depends_on:
-      - room-mysql-container
+      room-mysql-container:
+        condition: service_healthy
     ports:
       - "8080:8080"
     networks:
