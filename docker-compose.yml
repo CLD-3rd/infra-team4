@@ -24,7 +24,7 @@ services:
 
 
   room-spring-container:
-    build: .
+    image: nniinjjii/roommate:latest
     container_name: room-spring-container
     depends_on:
       room-mysql-container:
