@@ -67,7 +67,6 @@ jobs:
               sudo systemctl enable docker
             fi
 
-          # 애플리케이션 디렉토리 생성
             sudo mkdir -p /home/ubuntu/roommate
             cd /home/ubuntu/roommate
             
