@@ -19,7 +19,8 @@ jobs:
           cache: maven
 
       - name: Build with Maven (skip tests and skip test compilation)
-        run: mvn -B package -DskipTests -Dmaven.test.skip=true --file pom.xml
+      - run: mvn -B package -Dmaven.test.skip=true --file pom.xml
+
 
       - name: Naming jar file
         run: mv ./target/*.jar ./target/roommate.jar
@@ -53,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: create directory (먼저 폴더 생성)
+      - name: make directory
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -84,7 +85,7 @@ jobs:
               sudo systemctl start docker
               sudo systemctl enable docker
             fi
-  
+
             cd /home/ubuntu/roommate
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/roommate:latest
             sudo docker-compose down || true
