@@ -47,7 +47,7 @@ public class MemberAdminController {
     }
 
 
-    @PutMapping("/admin/members/{memberId}")
+    @PostMapping("/admin/members/{memberId}")
     public ResponseEntity<MemberAdminResponse> editMemberRole(@PathVariable(name = "memberId") Long memberId,
                                                               @RequestBody UpdateMemberRoleRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(memberAdminService.changeMemberRole(memberId, request));
