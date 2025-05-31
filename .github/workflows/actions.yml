@@ -53,6 +53,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: make directory
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -64,7 +67,6 @@ jobs:
 
       - name: Check docker-compose file
         run: ls -al docker-compose.yml
-        working-directory: ${{ github.workspace }}
 
       - name: Upload docker-compose.yml
         uses: appleboy/scp-action@v1
