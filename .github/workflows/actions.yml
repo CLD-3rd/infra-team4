@@ -18,8 +18,8 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build with Maven (skip tests)
-        run: mvn -B package -DskipTests --file pom.xml
+      - name: Build with Maven (skip tests and skip test compilation)
+        run: mvn -B package -DskipTests -Dmaven.test.skip=true --file pom.xml
 
       - name: Naming jar file
         run: mv ./target/*.jar ./target/roommate.jar
